@@ -18,14 +18,16 @@ public class MPExampleCreatorScript : MonoBehaviourPunCallbacks
         LevelProperties properties = JsonUtility.FromJson<LevelProperties>( PhotonNetwork.CurrentRoom.CustomProperties[ CustomProperties.LevelProperties.ToString() ].ToString() );
         Debug.Log(properties.Opperation);
         //int result, first, second;
-        string opperation = "+";
+        
+        string operation = "+";
         int low = 0;
+        properties.From = low;
         int top = 10;
+        properties.To = top;
         int result = Random.Range( properties.From, properties.To );
-        int first = result - ( opperation == "+" ? Random.Range( properties.From, properties.To / 2 ) : Random.Range( properties.From, properties.To ) );
-        int second = opperation == "+" ? result - first : result + first;
-
-        var str = string.Format( "{0} {1} {2} = ?", first, opperation, second );
+        int first = operation == "+" ? Random.Range(properties.From, result) : Random.Range(result, properties.To);
+        int second = result - first;
+        var str = string.Format( "{0} {1} {2} = ?", first, operation, second );
         var answers = GetAnswerOptionsList( low, top, result );
 
         PhotonNetwork.CurrentRoom.SetCustomProperties( new ExitGames.Client.Photon.Hashtable { { "Example", str }, { "Answers", answers.ToArray() }, { "CorrectAnswer", result }, { "NewExample", true } } );
@@ -85,11 +87,14 @@ public class MPExampleCreatorScript : MonoBehaviourPunCallbacks
         while ( result.Count < 5 )
         {
             int newRand;
-            while ( ( newRand = Random.Range( low, top ) ) == correctAnswer && !result.Contains( newRand ) ) { }
-            result.Add( newRand );
+            newRand = Random.Range( low, top );
+            if ((newRand != correctAnswer) && !result.Contains( newRand ) ) 
+            {
+                result.Add( newRand );
+            }
         }
 
-        return result.OrderBy( x => Random.value ).ToList();
+        return result.OrderBy( x => x ).ToList();
     }
 
     private void FillButtons( List<int> answerOptionsList )
