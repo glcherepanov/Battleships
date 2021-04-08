@@ -14,15 +14,7 @@ public class NetworkCreater : MonoBehaviourPunCallbacks
     public Text HostName;
     public Text PlayerName;
 
-    private Dictionary<int, LevelProperties> levels = new Dictionary<int, LevelProperties>()
-    {
-        //new {1, new LevelProerties {
-            //to = 1,    
-            //from = 1,
-            //opperation = enum.plus
-        //},
-        //new {2,  },
-    };
+    public LevelProperties level;
     private int _selected = 0;
 
     // Start is called before the first frame update
@@ -102,12 +94,7 @@ public class NetworkCreater : MonoBehaviourPunCallbacks
         var Bool = PhotonNetwork.CurrentRoom.CustomProperties[ CustomProperties.StartGame.ToString() ];
         if ( Bool.Equals( true ) )
         {
-            string properties = JsonUtility.ToJson( new LevelProperties
-            {
-                From = 0,
-                To = 10,
-                Opperation = LevelProperties.OpperationEnum.Plus
-            }); 
+            string properties = JsonUtility.ToJson( level ); 
             PhotonNetwork.CurrentRoom.SetCustomProperties( new ExitGames.Client.Photon.Hashtable { { CustomProperties.LevelProperties.ToString(), properties } } );
             PhotonNetwork.LoadLevel( "Level" );
         }
@@ -126,6 +113,6 @@ public class NetworkCreater : MonoBehaviourPunCallbacks
 
     public void SelectLevel( int id )
     {
-        _selected = id;
+        level = LevelsData.SetGameLevel(id);
     }
 }

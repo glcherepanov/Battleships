@@ -16,21 +16,24 @@ public class MPExampleCreatorScript : MonoBehaviourPunCallbacks
     public void CreateExample()
     {
         LevelProperties properties = JsonUtility.FromJson<LevelProperties>( PhotonNetwork.CurrentRoom.CustomProperties[ CustomProperties.LevelProperties.ToString() ].ToString() );
-        Debug.Log(properties.Opperation);
-        //int result, first, second;
-        
-        string operation = "+";
-        int low = 0;
-        properties.From = low;
-        int top = 10;
-        properties.To = top;
-        int result = Random.Range( properties.From, properties.To );
-        int first = operation == "+" ? Random.Range(properties.From, result) : Random.Range(result, properties.To);
-        int second = result - first;
-        var str = string.Format( "{0} {1} {2} = ?", first, operation, second );
-        var answers = GetAnswerOptionsList( low, top, result );
 
-        PhotonNetwork.CurrentRoom.SetCustomProperties( new ExitGames.Client.Photon.Hashtable { { "Example", str }, { "Answers", answers.ToArray() }, { "CorrectAnswer", result }, { "NewExample", true } } );
+        Debug.Log(properties.Opperation);
+        Debug.Log(properties.From);
+        Debug.Log(properties.To);
+        //int result, first, second;
+
+        //string operation = properties.Opperation == LevelProperties.OpperationEnum.Plus ? "+" : "-";
+        //// int low = 0;
+        //// properties.From = low;
+        //// int top = 10;
+        //// properties.To = top;
+        //int result = Random.Range( properties.From, properties.To );
+        //int first = operation == "+" ? Random.Range(properties.From, result) : Random.Range(result, properties.To);
+        //int second = result - first;
+        //var str = string.Format( "{0} {1} {2} = ?", first, operation, second );
+        //var answers = GetAnswerOptionsList(properties.From, properties.To, result );
+
+        //PhotonNetwork.CurrentRoom.SetCustomProperties( new ExitGames.Client.Photon.Hashtable { { "Example", str }, { "Answers", answers.ToArray() }, { "CorrectAnswer", result }, { "NewExample", true } } );
     }
 
     public override void OnRoomPropertiesUpdate( ExitGames.Client.Photon.Hashtable propertiesThatChanged )
