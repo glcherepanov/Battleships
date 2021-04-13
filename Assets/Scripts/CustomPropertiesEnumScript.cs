@@ -6,5 +6,8 @@
     HitShip,
     CrashShip,
     CrashTower,
+    CreateNewExample,
+    MoveShips
+    CrashTower,
     AnswerDone
 }

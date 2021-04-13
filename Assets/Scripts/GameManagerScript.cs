@@ -28,6 +28,8 @@ public class GameManagerScript : MonoBehaviourPunCallbacks
             if ( PhotonNetwork.IsMasterClient )
             {
                 InitShips();
+                PhotonNetwork.CurrentRoom.SetCustomProperties( new ExitGames.Client.Photon.Hashtable { { CustomProperties.CreateNewExample.ToString(), true } } );
+                PhotonNetwork.CurrentRoom.SetCustomProperties( new ExitGames.Client.Photon.Hashtable { { CustomProperties.MoveShips.ToString(), true } } );
                 ShipMovingHelper.GetComponent<ShipMovingHelper>().SetShips( new System.Collections.Generic.List<GameObject>() { _firstShip, _secondShip, _thirdShip, _fourthShip, _fifthShip } );
                 Host.text = PhotonNetwork.LocalPlayer.NickName;
                 Player.text = PhotonNetwork.CurrentRoom.Players.Last( p => !p.Value.IsMasterClient ).Value.NickName;

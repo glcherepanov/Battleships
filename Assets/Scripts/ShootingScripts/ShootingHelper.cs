@@ -23,9 +23,10 @@ public class ShootingHelper : MonoBehaviourPunCallbacks
             var tower = GameObject.FindGameObjectsWithTag( player ).Where( item => item.GetComponent<IslandScript>().IsAlive ).First();
             tower.GetComponent<IslandScript>().Crash();
             GameObject.FindGameObjectsWithTag( player );
+            PhotonNetwork.CurrentRoom.SetCustomProperties( new ExitGames.Client.Photon.Hashtable { { CustomProperties.MoveShips.ToString(), false } } );
             //_winWindow.SetActive(true);
-            var hostName = GameObject.FindGameObjectsWithTag( "hostName" ).First().GetComponent<Text>().text;
-            var noHostName = GameObject.FindGameObjectsWithTag( "playerName" ).First().GetComponent<Text>().text;
+            var hostName = GameObject.FindGameObjectsWithTag( "hostName" ).First().GetComponent<TextMesh>().text;
+            var noHostName = GameObject.FindGameObjectsWithTag( "playerName" ).First().GetComponent<TextMesh>().text;
 
             string message = String.Format($"Победил игрок - {0}\nПроиграл игрок - {1}", player == "host" ? hostName : noHostName, player != "host" ? hostName : noHostName);
             Debug.Log(message);
@@ -35,6 +36,20 @@ public class ShootingHelper : MonoBehaviourPunCallbacks
             var tower = GameObject.FindGameObjectsWithTag( player ).Where( item => item.GetComponent<IslandScript>().IsAlive ).First();
             tower.GetComponent<IslandScript>().Crash();
         }
+    }
+
+    private void CrashBothPlayerTowers()
+    {
+        if ( GameObject.FindGameObjectsWithTag( "hostTower" ).Where( item => item.GetComponent<IslandScript>().IsAlive ).ToList().Count == 1
+            && GameObject.FindGameObjectsWithTag( "playerTower" ).Where( item => item.GetComponent<IslandScript>().IsAlive ).ToList().Count == 1 ) 
+        {
+            PhotonNetwork.CurrentRoom.SetCustomProperties( new ExitGames.Client.Photon.Hashtable { { CustomProperties.MoveShips.ToString(), false } } );
+            Debug.Log( "ничья" );
+        }
+        var tower = GameObject.FindGameObjectsWithTag( "hostTower" ).Where( item => item.GetComponent<IslandScript>().IsAlive ).First();
+        tower.GetComponent<IslandScript>().Crash();
+        tower = GameObject.FindGameObjectsWithTag( "playerTower" ).Where( item => item.GetComponent<IslandScript>().IsAlive ).First();
+        tower.GetComponent<IslandScript>().Crash();
     }
 
     public void Respanw()
@@ -57,6 +72,13 @@ public class ShootingHelper : MonoBehaviourPunCallbacks
             else
             {
                 CrashTower( answerObject.Player + "Tower" );
+            }
+        }
+        if ( propertiesThatChanged.TryGetValue( CustomProperties.CrashTower.ToString(), out object crash ) )
+        {
+            if ( crash.Equals( true ) )
+            {
+                CrashBothPlayerTowers();
             }
         }
     }

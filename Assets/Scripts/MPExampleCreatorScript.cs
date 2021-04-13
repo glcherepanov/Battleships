@@ -58,6 +58,14 @@ public class MPExampleCreatorScript : MonoBehaviourPunCallbacks
                 }
             }
         }
+
+        if ( propertiesThatChanged.TryGetValue( CustomProperties.CreateNewExample.ToString(), out object isNew ) )
+        {
+            if ( isNew.Equals( true ) )
+            {
+                CreateExample();
+            }
+        }
     }
 
     public void SetShips( List<GameObject> ships )
