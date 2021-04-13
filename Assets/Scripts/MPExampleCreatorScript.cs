@@ -16,17 +16,21 @@ public class MPExampleCreatorScript : MonoBehaviourPunCallbacks
     public void CreateExample()
     {
         LevelProperties properties = JsonUtility.FromJson<LevelProperties>( PhotonNetwork.CurrentRoom.CustomProperties[ CustomProperties.LevelProperties.ToString() ].ToString() );
-        Debug.Log(properties.Opperation);
-        //int result, first, second;
-        string opperation = "+";
-        int low = 0;
-        int top = 10;
-        int result = Random.Range( properties.From, properties.To );
-        int first = result - ( opperation == "+" ? Random.Range( properties.From, properties.To / 2 ) : Random.Range( properties.From, properties.To ) );
-        int second = opperation == "+" ? result - first : result + first;
 
-        var str = string.Format( "{0} {1} {2} = ?", first, opperation, second );
-        var answers = GetAnswerOptionsList( low, top, result );
+        Debug.Log(properties.Opperation);
+        Debug.Log(properties.From);
+        Debug.Log(properties.To);
+
+        string operation = properties.Opperation == LevelProperties.OpperationEnum.Plus ? "+" : "-";
+        // int low = 0;
+        // properties.From = low;
+        // int top = 10;
+        // properties.To = top;
+        int result = Random.Range( properties.From, properties.To );
+        int first = properties.Opperation == LevelProperties.OpperationEnum.Plus ? Random.Range(properties.From, result) : Random.Range(result, properties.To);
+        int second = properties.Opperation == LevelProperties.OpperationEnum.Plus ? result - first : first - result;
+        var str = string.Format( "{0} {1} {2} = ?", first, operation, second );
+        var answers = GetAnswerOptionsList(properties.From, properties.To, result );
 
         PhotonNetwork.CurrentRoom.SetCustomProperties( new ExitGames.Client.Photon.Hashtable { { "Example", str }, { "Answers", answers.ToArray() }, { "CorrectAnswer", result }, { "NewExample", true } } );
     }
@@ -85,11 +89,14 @@ public class MPExampleCreatorScript : MonoBehaviourPunCallbacks
         while ( result.Count < 5 )
         {
             int newRand;
-            while ( ( newRand = Random.Range( low, top ) ) == correctAnswer && !result.Contains( newRand ) ) { }
-            result.Add( newRand );
+            newRand = Random.Range( low, top );
+            if ((newRand != correctAnswer) && !result.Contains( newRand ) ) 
+            {
+                result.Add( newRand );
+            }
         }
 
-        return result.OrderBy( x => Random.value ).ToList();
+        return result.OrderBy( x => x ).ToList();
     }
 
     private void FillButtons( List<int> answerOptionsList )

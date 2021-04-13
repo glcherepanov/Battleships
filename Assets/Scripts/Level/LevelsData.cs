@@ -1,69 +1,64 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
+using UnityEngine;
+using UnityEngine.UI;
 
 public class LevelsData
 {
-    private IReadOnlyList<LevelDataObject> readonlyList = new List<LevelDataObject>()
+    private static List<LevelProperties> readonlyList = new List<LevelProperties>()
     {
-        new LevelDataObject()
+        new LevelProperties()
         {
-            name = "+ to 10",
-            resultFrom = 0,
-            resultTo = 10,
-            opperation = "+"
+            From = 0,
+            To = 10,
+            Opperation = LevelProperties.OpperationEnum.Plus
         },
-        new LevelDataObject()
+        new LevelProperties()
         {
-            name = "+ to 20",
-            resultFrom = 0,
-            resultTo = 20,
-            opperation = "+"
+            From = 0,
+            To = 20,
+            Opperation = LevelProperties.OpperationEnum.Plus
         },
-        new LevelDataObject()
+        new LevelProperties()
         {
-            name = "+ to 60",
-            resultFrom = 0,
-            resultTo = 60,
-            opperation = "+"
+            From = 0,
+            To = 60,
+            Opperation = LevelProperties.OpperationEnum.Plus
         },
-        new LevelDataObject()
+        new LevelProperties()
         {
-            name = "+ to 100",
-            resultFrom = 0,
-            resultTo = 100,
-            opperation = "+"
+            From = 0,
+            To = 100,
+            Opperation = LevelProperties.OpperationEnum.Plus
         },
-        new LevelDataObject()
+        new LevelProperties()
         {
-            name = "- to 10",
-            resultFrom = 0,
-            resultTo = 10,
-            opperation = "-"
+            From = 0,
+            To = 10,
+            Opperation = LevelProperties.OpperationEnum.Minus
         },
-        new LevelDataObject()
+        new LevelProperties()
         {
-            name = "- to 30",
-            resultFrom = 0,
-            resultTo = 10,
-            opperation = "-"
+            From = 0,
+            To = 20,
+            Opperation = LevelProperties.OpperationEnum.Minus
         },
-        new LevelDataObject()
+        new LevelProperties()
         {
-            name = "- to 60",
-            resultFrom = 0,
-            resultTo = 10,
-            opperation = "-"
+            From = 0,
+            To = 60,
+            Opperation = LevelProperties.OpperationEnum.Minus
         },
-        new LevelDataObject()
+        new LevelProperties()
         {
-            name = "- to 100",
-            resultFrom = 0,
-            resultTo = 10,
-            opperation = "-"
+            From = 0,
+            To = 100,
+            Opperation = LevelProperties.OpperationEnum.Minus
         },
     };
 
-    public void SetGameLevel()
+    public static string SetGameLevel(int numberLevel)
     {
-        
+        return JsonUtility.ToJson(readonlyList[numberLevel - 1]);
     }
 }

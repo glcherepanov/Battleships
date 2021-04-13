@@ -1,6 +1,8 @@
 ﻿using Photon.Pun;
+using System;
 using System.Linq;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class ShootingHelper : MonoBehaviourPunCallbacks
 {
@@ -16,9 +18,23 @@ public class ShootingHelper : MonoBehaviourPunCallbacks
 
     private void CrashTower( string player )
     {
-        var tower = GameObject.FindGameObjectsWithTag( player ).Where( item => item.GetComponent<IslandScript>().IsAlive ).First();
+        if (GameObject.FindGameObjectsWithTag( player ).Where( item => item.GetComponent<IslandScript>().IsAlive ).ToList().Count == 1)
+        {
+            var tower = GameObject.FindGameObjectsWithTag( player ).Where( item => item.GetComponent<IslandScript>().IsAlive ).First();
+            tower.GetComponent<IslandScript>().Crash();
+            GameObject.FindGameObjectsWithTag( player );
+            //_winWindow.SetActive(true);
+            var hostName = GameObject.FindGameObjectsWithTag( "hostName" ).First().GetComponent<Text>().text;
+            var noHostName = GameObject.FindGameObjectsWithTag( "playerName" ).First().GetComponent<Text>().text;
 
-        tower.GetComponent<IslandScript>().Crash();
+            string message = String.Format($"Победил игрок - {0}\nПроиграл игрок - {1}", player == "host" ? hostName : noHostName, player != "host" ? hostName : noHostName);
+            Debug.Log(message);
+        }
+        else
+        {
+            var tower = GameObject.FindGameObjectsWithTag( player ).Where( item => item.GetComponent<IslandScript>().IsAlive ).First();
+            tower.GetComponent<IslandScript>().Crash();
+        }
     }
 
     public void Respanw()

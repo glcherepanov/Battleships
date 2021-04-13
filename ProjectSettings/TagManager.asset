@@ -9,6 +9,8 @@ TagManager:
   - answerShipText
   - hostTower
   - playerTower
+  - hostName
+  - playerName
   layers:
   - Default
   - TransparentFX
