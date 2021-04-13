@@ -44,7 +44,9 @@ public class ShootingHelper : MonoBehaviourPunCallbacks
 
     public override void OnRoomPropertiesUpdate( ExitGames.Client.Photon.Hashtable propertiesThatChanged )
     {
-        if ( propertiesThatChanged.TryGetValue( CustomProperties.CheckAnswer.ToString(), out object answer ) )
+        PhotonNetwork.CurrentRoom.CustomProperties.TryGetValue( CustomProperties.AnswerDone.ToString(), out object answerDone);
+
+        if ( propertiesThatChanged.TryGetValue( CustomProperties.CheckAnswer.ToString(), out object answer ) && answerDone.Equals(false) )
         {
             var answerObject = JsonUtility.FromJson<AnswerObject>( answer.ToString() );
 

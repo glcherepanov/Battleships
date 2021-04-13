@@ -5,5 +5,6 @@
     CheckAnswer,
     HitShip,
     CrashShip,
-    CrashTower
+    CrashTower,
+    AnswerDone
 }

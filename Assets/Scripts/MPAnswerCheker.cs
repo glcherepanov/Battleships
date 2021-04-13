@@ -28,18 +28,26 @@ public class MPAnswerCheker : MonoBehaviourPunCallbacks
 
     public override void OnRoomPropertiesUpdate( ExitGames.Client.Photon.Hashtable propertiesThatChanged )
     {
+        PhotonNetwork.CurrentRoom.CustomProperties.TryGetValue( CustomProperties.AnswerDone.ToString(), out object answerDone);
 
+        Debug.Log("Check answer func");
+        Debug.Log(answerDone);
         if ( propertiesThatChanged.TryGetValue( CustomProperties.CheckAnswer.ToString(), out object answer ) )
         {
             var answerObject = JsonUtility.FromJson<AnswerObject>( answer.ToString() );
 
-            if ( answerObject.Correct )
+            if (answerDone.ToString().Equals("False") )
             {
-                _shipMovingHelper.crushShip( answerObject.Target );
-            }
-            else
-            {
-                _shipMovingHelper.hitShip( ( string ) propertiesThatChanged[ "AnswerNumber" ] );
+                if ( answerObject.Correct )
+                {
+                    _shipMovingHelper.crushShip( answerObject.Target );
+                    PhotonNetwork.CurrentRoom.SetCustomProperties( new ExitGames.Client.Photon.Hashtable { { CustomProperties.AnswerDone.ToString(), true } } );
+                    Debug.Log(answerDone);
+                }
+                else
+                {
+                    _shipMovingHelper.hitShip( ( string ) propertiesThatChanged[ "AnswerNumber" ] );
+                }
             }
         }
     }
