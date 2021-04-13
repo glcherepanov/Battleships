@@ -8,11 +8,11 @@ using UnityEngine.UI;
 
 public class NetworkCreater : MonoBehaviourPunCallbacks
 {
-    public Text StatusText;
-    public InputField UserName;
-    public InputField LobbyNameField;
-    public Text HostName;
-    public Text PlayerName;
+    public TMPro.TextMeshProUGUI StatusText;
+    public TMPro.TMP_InputField UserName;
+    public TMPro.TMP_InputField LobbyNameField;
+    public TMPro.TextMeshProUGUI HostName;
+    public TMPro.TextMeshProUGUI PlayerName;
 
     public string levelJson;
     private int _selected = 0;
