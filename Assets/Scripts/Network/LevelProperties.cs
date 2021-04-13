@@ -1,7 +1,9 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+[Serializable]
 public class LevelProperties
 {
     public enum OpperationEnum
@@ -10,7 +12,7 @@ public class LevelProperties
         Minus
     };
 
-    public int From { get; set; }
-    public int To { get; set; }
-    public OpperationEnum Opperation { get; set; }
+    public int From;
+    public int To;
+    public OpperationEnum Opperation;
 }

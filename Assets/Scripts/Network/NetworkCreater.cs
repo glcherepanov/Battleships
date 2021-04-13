@@ -14,7 +14,7 @@ public class NetworkCreater : MonoBehaviourPunCallbacks
     public Text HostName;
     public Text PlayerName;
 
-    public LevelProperties level;
+    public string levelJson;
     private int _selected = 0;
 
     // Start is called before the first frame update
@@ -94,8 +94,8 @@ public class NetworkCreater : MonoBehaviourPunCallbacks
         var Bool = PhotonNetwork.CurrentRoom.CustomProperties[ CustomProperties.StartGame.ToString() ];
         if ( Bool.Equals( true ) )
         {
-            string properties = JsonUtility.ToJson( level ); 
-            PhotonNetwork.CurrentRoom.SetCustomProperties( new ExitGames.Client.Photon.Hashtable { { CustomProperties.LevelProperties.ToString(), properties } } );
+            // string properties = JsonUtility.ToJson( level ); 
+            PhotonNetwork.CurrentRoom.SetCustomProperties( new ExitGames.Client.Photon.Hashtable { { CustomProperties.LevelProperties.ToString(), levelJson } } );
             PhotonNetwork.LoadLevel( "Level" );
         }
     }
@@ -113,6 +113,7 @@ public class NetworkCreater : MonoBehaviourPunCallbacks
 
     public void SelectLevel( int id )
     {
-        level = LevelsData.SetGameLevel(id);
+        levelJson = LevelsData.SetGameLevel(id);
+        Debug.Log(levelJson);
     }
 }

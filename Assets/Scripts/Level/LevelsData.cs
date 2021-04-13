@@ -1,8 +1,11 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
+using UnityEngine;
+using UnityEngine.UI;
 
 public class LevelsData
 {
-    private static IReadOnlyList<LevelProperties> readonlyList = new List<LevelProperties>()
+    private static List<LevelProperties> readonlyList = new List<LevelProperties>()
     {
         new LevelProperties()
         {
@@ -37,25 +40,25 @@ public class LevelsData
         new LevelProperties()
         {
             From = 0,
-            To = 10,
+            To = 20,
             Opperation = LevelProperties.OpperationEnum.Minus
         },
         new LevelProperties()
         {
             From = 0,
-            To = 10,
+            To = 60,
             Opperation = LevelProperties.OpperationEnum.Minus
         },
         new LevelProperties()
         {
             From = 0,
-            To = 10,
+            To = 100,
             Opperation = LevelProperties.OpperationEnum.Minus
         },
     };
 
-    public static LevelProperties SetGameLevel(int numberLevel)
+    public static string SetGameLevel(int numberLevel)
     {
-        return readonlyList[numberLevel - 1];
+        return JsonUtility.ToJson(readonlyList[numberLevel - 1]);
     }
 }
