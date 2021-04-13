@@ -7,7 +7,6 @@
     CrashShip,
     CrashTower,
     CreateNewExample,
-    MoveShips
-    CrashTower,
+    MoveShips,
     AnswerDone
 }
