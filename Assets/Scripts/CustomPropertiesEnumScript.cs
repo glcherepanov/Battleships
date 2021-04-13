@@ -8,5 +8,6 @@
     CrashTower,
     CreateNewExample,
     MoveShips,
-    AnswerDone
+    AnswerDone,
+    RespawnShips
 }

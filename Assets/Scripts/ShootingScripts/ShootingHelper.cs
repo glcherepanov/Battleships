@@ -28,7 +28,7 @@ public class ShootingHelper : MonoBehaviourPunCallbacks
             var hostName = GameObject.FindGameObjectsWithTag( "hostName" ).First().GetComponent<TextMesh>().text;
             var noHostName = GameObject.FindGameObjectsWithTag( "playerName" ).First().GetComponent<TextMesh>().text;
 
-            string message = String.Format($"Победил игрок - {0}\nПроиграл игрок - {1}", player == "host" ? hostName : noHostName, player != "host" ? hostName : noHostName);
+            string message = String.Format("Победил игрок - {0}\nПроиграл игрок - {1}", player == "host" ? hostName : noHostName, player != "host" ? hostName : noHostName);
             Debug.Log(message);
         }
         else

@@ -5,7 +5,7 @@ using System.Linq;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class ShipMovingHelper : MonoBehaviour
+public class ShipMovingHelper : MonoBehaviourPunCallbacks
 {
     public float shipSpeed = 0.001F;
     public float startPoint = 0;
@@ -92,5 +92,16 @@ public class ShipMovingHelper : MonoBehaviour
     public void SetShips( List<GameObject> newShips )
     {
         _ships = newShips;
+    }
+
+    public override void OnRoomPropertiesUpdate( ExitGames.Client.Photon.Hashtable propertiesThatChanged )
+    {
+        if ( propertiesThatChanged.TryGetValue( CustomProperties.RespawnShips.ToString(), out object Bool ) )
+        {
+            if (Bool.Equals(true) )
+            {
+                RespawnShips();
+            }
+        }
     }
 }
