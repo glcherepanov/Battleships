@@ -82,4 +82,9 @@ public class ShootingHelper : MonoBehaviourPunCallbacks
             }
         }
     }
+
+    private void Check()
+	{
+
+	}
 }
