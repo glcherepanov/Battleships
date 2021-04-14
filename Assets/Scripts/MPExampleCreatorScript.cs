@@ -109,11 +109,21 @@ public class MPExampleCreatorScript : MonoBehaviourPunCallbacks
 
     private void FillButtons( List<int> answerOptionsList )
     {
-        answerOptionsList = new List<int>( answerOptionsList );
-        foreach ( var button in GameObject.FindGameObjectsWithTag( "answerButton" ) )
+        if ( PhotonNetwork.LocalPlayer.NickName == PhotonNetwork.CurrentRoom.Players.Last().Value.NickName && PhotonNetwork.CurrentRoom.PlayerCount > 2 )
         {
-            button.GetComponentInChildren<Text>().text = answerOptionsList.First().ToString();
-            answerOptionsList.Remove( answerOptionsList.First() );
+            GameObject.FindGameObjectsWithTag( "answerButton" ).ToList().ForEach( b =>
+            {
+                b.SetActive( false );
+            });
+        }
+        else
+        {
+            answerOptionsList = new List<int>( answerOptionsList );
+            foreach ( var button in GameObject.FindGameObjectsWithTag( "answerButton" ) )
+            {
+                button.GetComponentInChildren<Text>().text = answerOptionsList.First().ToString();
+                answerOptionsList.Remove( answerOptionsList.First() );
+            }
         }
     }
 
