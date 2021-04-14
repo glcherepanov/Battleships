@@ -5,8 +5,9 @@ using Vuforia;
 public class DesktopTest : MonoBehaviour
 {
 	private TrackableBehaviour trackableBehaviour = null;
+	private DefaultTrackableEventHandler defaultTrackable = null;
 
-	private void Awake()
+	private void Start()
 	{
 		if(!Application.isEditor && Application.isMobilePlatform)
 		{
@@ -15,6 +16,8 @@ public class DesktopTest : MonoBehaviour
 		}
 
 		trackableBehaviour = GetComponent<TrackableBehaviour>();
+		defaultTrackable = GetComponent<DefaultTrackableEventHandler>();
+		defaultTrackable.OnTargetFound.Invoke();
 	}
 
 	private void Update()

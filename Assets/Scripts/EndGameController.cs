@@ -1,4 +1,5 @@
 ﻿using Photon.Pun;
+using Photon.Realtime;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
@@ -69,7 +70,7 @@ public class EndGameController : MonoBehaviourPunCallbacks
 			case EndGameState.Quitting:
 				endGameScreen.Hide();
 				PhotonNetwork.DestroyPlayerObjects(PhotonNetwork.LocalPlayer);
-				PhotonNetwork.LeaveRoom();
+				PhotonNetwork.Disconnect();
 				break;
 		}
 	}
@@ -146,7 +147,7 @@ public class EndGameController : MonoBehaviourPunCallbacks
 		return PhotonNetwork.LocalPlayer.IsMasterClient;
 	}
 
-	public override void OnLeftRoom()
+	public override void OnDisconnected(DisconnectCause cause)
 	{
 		SceneManager.LoadSceneAsync(MainMenuScene);
 	}
