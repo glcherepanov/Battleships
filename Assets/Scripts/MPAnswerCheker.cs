@@ -7,6 +7,8 @@ public class MPAnswerCheker : MonoBehaviourPunCallbacks
     public GameObject ShipMovingHelper;
     private ShipMovingHelper _shipMovingHelper;
     //private TowerShootingHelper _towerShootingHelper;
+    private float _timer = 0;
+    private bool _wait = false;
 
     void Start()
     {
@@ -26,6 +28,17 @@ public class MPAnswerCheker : MonoBehaviourPunCallbacks
         );
     }
 
+    void Update() 
+    {
+        if ( _wait && _timer > 10)
+        {
+            PhotonNetwork.CurrentRoom.SetCustomProperties( new ExitGames.Client.Photon.Hashtable { { CustomProperties.RespawnShips.ToString(), true } } );
+            PhotonNetwork.CurrentRoom.SetCustomProperties( new ExitGames.Client.Photon.Hashtable { { CustomProperties.CreateNewExample.ToString(), true } } );
+            PhotonNetwork.CurrentRoom.SetCustomProperties( new ExitGames.Client.Photon.Hashtable { { CustomProperties.MoveShips.ToString(), true } } );
+            _wait = false;
+        }
+        _timer += Time.deltaTime;
+    } 
     public override void OnRoomPropertiesUpdate( ExitGames.Client.Photon.Hashtable propertiesThatChanged )
     {
         PhotonNetwork.CurrentRoom.CustomProperties.TryGetValue( CustomProperties.AnswerDone.ToString(), out object answerDone);
@@ -43,6 +56,9 @@ public class MPAnswerCheker : MonoBehaviourPunCallbacks
                     _shipMovingHelper.crushShip( answerObject.Target );
                     PhotonNetwork.CurrentRoom.SetCustomProperties( new ExitGames.Client.Photon.Hashtable { { CustomProperties.AnswerDone.ToString(), true } } );
                     Debug.Log(answerDone);
+                    _wait = true;
+                    _timer = 0;
+                    PhotonNetwork.CurrentRoom.SetCustomProperties( new ExitGames.Client.Photon.Hashtable { { CustomProperties.MoveShips.ToString(), false } } );
                 }
                 else
                 {
