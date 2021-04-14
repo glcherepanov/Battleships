@@ -38,16 +38,19 @@ public class ShipMovingHelper : MonoBehaviourPunCallbacks
         PhotonNetwork.CurrentRoom.CustomProperties.TryGetValue( CustomProperties.MoveShips.ToString(), out object isMoving );
         foreach ( var ship in _ships )
         {
-            if ( !ship.GetComponent<Animator>().GetBool( "IsHited" ) && isMoving.Equals(true))
+            if (isMoving != null)
             {
-                var transform = ship.GetComponent<Transform>();
-                transform.position = new Vector3( transform.position.x + shipSpeed, transform.position.y, transform.position.z );
-
-                if ( transform.position.x >= endPoint )
+                if ( !ship.GetComponent<Animator>().GetBool( "IsHited" ) && isMoving.Equals(true))
                 {
-                    PhotonNetwork.CurrentRoom.SetCustomProperties( new ExitGames.Client.Photon.Hashtable { { CustomProperties.CrashTower.ToString(), true } } );
-                    PhotonNetwork.CurrentRoom.SetCustomProperties( new ExitGames.Client.Photon.Hashtable { { CustomProperties.CreateNewExample.ToString(), true } } );
-                    RespawnShips();
+                    var transform = ship.GetComponent<Transform>();
+                    transform.position = new Vector3( transform.position.x + shipSpeed, transform.position.y, transform.position.z );
+
+                    if ( transform.position.x >= endPoint )
+                    {
+                        PhotonNetwork.CurrentRoom.SetCustomProperties( new ExitGames.Client.Photon.Hashtable { { CustomProperties.CrashTower.ToString(), true } } );
+                        PhotonNetwork.CurrentRoom.SetCustomProperties( new ExitGames.Client.Photon.Hashtable { { CustomProperties.CreateNewExample.ToString(), true } } );
+                        RespawnShips();
+                    }
                 }
             }
         }
@@ -84,9 +87,9 @@ public class ShipMovingHelper : MonoBehaviourPunCallbacks
 
     public void hitShip( string number )
     {
-        var ship = _ships.First( item => item.GetComponentInChildren<TextMesh>().text == number );
+        // var ship = _ships.First( item => item.GetComponentInChildren<TextMesh>().text == number );
 
-        ship.GetComponentInChildren<TextMesh>().text = "error";
+        // ship.GetComponentInChildren<TextMesh>().text = "error";
     }
 
     public void SetShips( List<GameObject> newShips )

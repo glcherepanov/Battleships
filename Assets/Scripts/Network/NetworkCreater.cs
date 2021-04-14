@@ -32,7 +32,7 @@ public class NetworkCreater : MonoBehaviourPunCallbacks
     public void CreateRoom()
     {
         PhotonNetwork.NickName = UserName.text;
-        PhotonNetwork.CreateRoom( LobbyNameField.textComponent.text, new Photon.Realtime.RoomOptions { MaxPlayers = 2 } );
+        PhotonNetwork.CreateRoom( LobbyNameField.textComponent.text, new Photon.Realtime.RoomOptions { MaxPlayers = 3 } );
 
         Log( "CreatedRoom" );
     }
@@ -92,6 +92,7 @@ public class NetworkCreater : MonoBehaviourPunCallbacks
     public override void OnRoomPropertiesUpdate( ExitGames.Client.Photon.Hashtable propertiesThatChanged )
     {
         var Bool = PhotonNetwork.CurrentRoom.CustomProperties[ CustomProperties.StartGame.ToString() ];
+        Debug.Log(Bool.Equals( true ));
         if ( Bool.Equals( true ) )
         {
             // string properties = JsonUtility.ToJson( level ); 

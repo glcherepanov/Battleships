@@ -20,8 +20,6 @@ public class ShootingHelper : MonoBehaviourPunCallbacks
     {
         if (GameObject.FindGameObjectsWithTag( player ).Where( item => item.GetComponent<IslandScript>().IsAlive ).ToList().Count == 1)
         {
-            var tower = GameObject.FindGameObjectsWithTag( player ).Where( item => item.GetComponent<IslandScript>().IsAlive ).First();
-            tower.GetComponent<IslandScript>().Crash();
             GameObject.FindGameObjectsWithTag( player );
             PhotonNetwork.CurrentRoom.SetCustomProperties( new ExitGames.Client.Photon.Hashtable { { CustomProperties.MoveShips.ToString(), false } } );
             //_winWindow.SetActive(true);
@@ -31,11 +29,9 @@ public class ShootingHelper : MonoBehaviourPunCallbacks
             string message = String.Format("Победил игрок - {0}\nПроиграл игрок - {1}", player == "host" ? hostName : noHostName, player != "host" ? hostName : noHostName);
             Debug.Log(message);
         }
-        else
-        {
-            var tower = GameObject.FindGameObjectsWithTag( player ).Where( item => item.GetComponent<IslandScript>().IsAlive ).First();
-            tower.GetComponent<IslandScript>().Crash();
-        }
+        
+        var tower = GameObject.FindGameObjectsWithTag( player ).Where( item => item.GetComponent<IslandScript>().IsAlive ).First();
+        tower.GetComponent<IslandScript>().Crash();
     }
 
     private void CrashBothPlayerTowers()
