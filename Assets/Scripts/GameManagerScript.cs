@@ -23,8 +23,8 @@ public class GameManagerScript : MonoBehaviourPunCallbacks
 
     public void InitGameObjects()
     {
-        if ( PlayerManager.LocalPlayerInstance == null )
-        {
+        // if ( PlayerManager.LocalPlayerInstance == null )
+        // {
             if ( PhotonNetwork.IsMasterClient )
             {
                 InitShips();
@@ -34,11 +34,14 @@ public class GameManagerScript : MonoBehaviourPunCallbacks
                 Host.text = PhotonNetwork.LocalPlayer.NickName;
                 Player.text = PhotonNetwork.CurrentRoom.Players.Last( p => !p.Value.IsMasterClient ).Value.NickName;
             }
-            else
-            {
-                Host.text = PhotonNetwork.CurrentRoom.Players.First( p => p.Value.IsMasterClient).Value.NickName;
-                Player.text = PhotonNetwork.LocalPlayer.NickName; 
-            }
+            // else
+            // {
+            // }
+        // }
+        if ( !PhotonNetwork.IsMasterClient ) 
+        {
+            Host.text = PhotonNetwork.CurrentRoom.Players.First( p => p.Value.IsMasterClient).Value.NickName;
+            Player.text = PhotonNetwork.LocalPlayer.NickName; 
         }
     }
 
