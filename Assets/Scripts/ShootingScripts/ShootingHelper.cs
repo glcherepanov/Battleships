@@ -33,12 +33,12 @@ public class ShootingHelper : MonoBehaviourPunCallbacks
 
 			string message = String.Format("Победил игрок - {0}\nПроиграл игрок - {1}", player == "host" ? hostName : noHostName, player != "host" ? hostName : noHostName);
 			Debug.Log(message);
-
-			OnTowersChanged();
 		}
 
 		var tower = GameObject.FindGameObjectsWithTag(player).Where(item => item.GetComponent<IslandScript>().IsAlive).First();
 		tower.GetComponent<IslandScript>().Crash();
+
+		OnTowersChanged();
 	}
 
 	private void CrashBothPlayerTowers()
