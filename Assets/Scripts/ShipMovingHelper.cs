@@ -84,7 +84,7 @@ public class ShipMovingHelper : MonoBehaviourPunCallbacks
 		{
 			Vector3 position = positions[i];
 			Ship ship = ships[i];
-			ship.GameObject.transform.localPosition = position;
+			ship.GameObject.transform.position = position;
 			ship.GameObject.transform.localRotation = Quaternion.LookRotation(Vector3.left, Vector3.up);
 			ship.Animator.SetBool("IsAlive", true);
 			ship.Animator.SetBool("IsHited", false);
