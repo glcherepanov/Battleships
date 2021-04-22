@@ -9,7 +9,7 @@ public class DesktopTest : MonoBehaviour
 
 	private void Start()
 	{
-		if(!Application.isEditor && Application.isMobilePlatform)
+		if(!Application.isEditor)
 		{
 			Destroy(this);
 			return;
@@ -22,6 +22,11 @@ public class DesktopTest : MonoBehaviour
 
 	private void Update()
 	{
+		if(!Application.isEditor)
+		{
+			return;
+		}
+
 		var rendererComponents = trackableBehaviour.GetComponentsInChildren<Renderer>(true);
 		var colliderComponents = trackableBehaviour.GetComponentsInChildren<Collider>(true);
 		var canvasComponents = trackableBehaviour.GetComponentsInChildren<Canvas>(true);
