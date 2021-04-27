@@ -7,6 +7,7 @@ using UnityEngine.UI;
 public class MPExampleCreatorScript : MonoBehaviourPunCallbacks
 {
     public Text ExampleText;
+    public GameObject AnswerText;
 
     private List<int> _answers = new List<int>();
     private int _result;
@@ -32,6 +33,7 @@ public class MPExampleCreatorScript : MonoBehaviourPunCallbacks
         var str = string.Format( "{0} {1} {2} = ?", first, operation, second );
         var answers = GetAnswerOptionsList(properties.From, properties.To, result );
 
+        AnswerText.SetActive( false );
         PhotonNetwork.CurrentRoom.SetCustomProperties( new ExitGames.Client.Photon.Hashtable { { "Example", str }, { "Answers", answers.ToArray() }, { "CorrectAnswer", result }, { "NewExample", true }, {CustomProperties.AnswerDone.ToString(), false} } );
     }
 

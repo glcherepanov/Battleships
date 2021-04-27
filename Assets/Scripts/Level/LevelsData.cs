@@ -15,19 +15,19 @@ public class LevelsData
         },
         new LevelProperties()
         {
-            From = 0,
+            From = 10,
             To = 20,
             Opperation = LevelProperties.OpperationEnum.Plus
         },
         new LevelProperties()
         {
-            From = 0,
+            From = 20,
             To = 60,
             Opperation = LevelProperties.OpperationEnum.Plus
         },
         new LevelProperties()
         {
-            From = 0,
+            From = 60,
             To = 100,
             Opperation = LevelProperties.OpperationEnum.Plus
         },
@@ -39,19 +39,19 @@ public class LevelsData
         },
         new LevelProperties()
         {
-            From = 0,
+            From = 10,
             To = 20,
             Opperation = LevelProperties.OpperationEnum.Minus
         },
         new LevelProperties()
         {
-            From = 0,
+            From = 20,
             To = 60,
             Opperation = LevelProperties.OpperationEnum.Minus
         },
         new LevelProperties()
         {
-            From = 0,
+            From = 60,
             To = 100,
             Opperation = LevelProperties.OpperationEnum.Minus
         },

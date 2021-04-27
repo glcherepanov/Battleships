@@ -5,6 +5,7 @@ using UnityEngine.UI;
 public class MPAnswerCheker : MonoBehaviourPunCallbacks
 {
     public GameObject ShipMovingHelper;
+    public GameObject AnswerText;
     private ShipMovingHelper _shipMovingHelper;
     //private TowerShootingHelper _towerShootingHelper;
     private float _timer = 0;
@@ -53,6 +54,8 @@ public class MPAnswerCheker : MonoBehaviourPunCallbacks
             {
                 if ( answerObject.Correct )
                 {
+                    AnswerText.GetComponent<Text>().text = string.Format( "{0} ответил верно", PhotonNetwork.LocalPlayer.NickName );
+                    AnswerText.SetActive( true );
                     _shipMovingHelper.crushShip( answerObject.Target );
                     PhotonNetwork.CurrentRoom.SetCustomProperties( new ExitGames.Client.Photon.Hashtable { { CustomProperties.AnswerDone.ToString(), true } } );
                     Debug.Log(answerDone);
