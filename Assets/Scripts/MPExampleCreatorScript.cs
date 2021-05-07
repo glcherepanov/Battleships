@@ -18,6 +18,7 @@ public class MPExampleCreatorScript : MonoBehaviourPunCallbacks
     {
         LevelProperties properties = JsonUtility.FromJson<LevelProperties>( PhotonNetwork.CurrentRoom.CustomProperties[ CustomProperties.LevelProperties.ToString() ].ToString() );
 
+        Debug.Log(properties);
         Debug.Log(properties.Opperation);
         Debug.Log(properties.From);
         Debug.Log(properties.To);

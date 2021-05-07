@@ -1,4 +1,5 @@
 ﻿using Photon.Pun;
+using System.Linq;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -54,7 +55,7 @@ public class MPAnswerCheker : MonoBehaviourPunCallbacks
             {
                 if ( answerObject.Correct )
                 {
-                    AnswerText.GetComponent<Text>().text = string.Format( "{0} ответил верно", PhotonNetwork.LocalPlayer.NickName );
+                    AnswerText.GetComponent<Text>().text = string.Format( "{0} ответил верно", answerObject.Player == "host" ? PhotonNetwork.CurrentRoom.Players.Values.First(p => p.IsMasterClient).NickName : PhotonNetwork.CurrentRoom.Players.Values.First( p => !p.IsMasterClient ).NickName );
                     AnswerText.SetActive( true );
                     _shipMovingHelper.crushShip( answerObject.Target );
                     PhotonNetwork.CurrentRoom.SetCustomProperties( new ExitGames.Client.Photon.Hashtable { { CustomProperties.AnswerDone.ToString(), true } } );
