@@ -13,6 +13,8 @@ public class NetworkCreater : MonoBehaviourPunCallbacks
     public TMPro.TMP_InputField LobbyNameField;
     public TMPro.TextMeshProUGUI HostName;
     public TMPro.TextMeshProUGUI PlayerName;
+    public GameObject StartGameButton;
+    public GameObject SelectLevelButton;
 
     public string levelJson;
     private int _selected = 0;
@@ -71,6 +73,8 @@ public class NetworkCreater : MonoBehaviourPunCallbacks
         if ( PhotonNetwork.IsMasterClient )
         {
             HostName.text += PhotonNetwork.NickName;
+            StartGameButton.SetActive( true );
+            SelectLevelButton.SetActive( true );
         }
         else
         {
