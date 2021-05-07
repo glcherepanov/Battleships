@@ -13,20 +13,16 @@ public class MPExampleCreatorScript : MonoBehaviourPunCallbacks
     private int _result;
 
     private List<GameObject> _ships;
-    private LevelProperties _properties = new LevelProperties();
+    private LevelProperties properties;
 
     public void CreateExample()
     {
         if ( !PhotonNetwork.LocalPlayer.IsMasterClient ) {
             return;
         }
-        if ( _properties.Equals( new LevelProperties() ) ) {
-            Debug.Log("init levelproperties");
-        }
-
-        LevelProperties properties = JsonUtility.FromJson<LevelProperties>( PhotonNetwork.CurrentRoom.CustomProperties[ CustomProperties.LevelProperties.ToString() ].ToString() );
-
-        while ( properties == null ) {
+        if ( properties == null )
+        {
+            Debug.Log( "init levelproperties" );
             properties = JsonUtility.FromJson<LevelProperties>( PhotonNetwork.CurrentRoom.CustomProperties[ CustomProperties.LevelProperties.ToString() ].ToString() );
         }
 
