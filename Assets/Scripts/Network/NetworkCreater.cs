@@ -96,6 +96,10 @@ public class NetworkCreater : MonoBehaviourPunCallbacks
         if ( Bool.Equals( true ) )
         {
             // string properties = JsonUtility.ToJson( level ); 
+            if ( string.IsNullOrEmpty( levelJson ) )
+            {
+                levelJson = LevelsData.SetGameLevel( 1 );
+            }
             PhotonNetwork.CurrentRoom.SetCustomProperties( new ExitGames.Client.Photon.Hashtable { { CustomProperties.LevelProperties.ToString(), levelJson } } );
             PhotonNetwork.LoadLevel( "Level" );
         }
