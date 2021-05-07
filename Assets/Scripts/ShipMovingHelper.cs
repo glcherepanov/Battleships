@@ -91,15 +91,18 @@ public class ShipMovingHelper : MonoBehaviourPunCallbacks
 		}
 	}
 
-	public void crushShip(string number)
-	{
-		Ship ship = ships.First(s => s.Text.text == number);
+    public void crushShip( string number )
+    {
+        if ( PhotonNetwork.IsMasterClient )
+        {
+            Ship ship = ships.First( s => s.Text.text == number );
 
-		ship.Animator.SetBool("IsHited", true);
-		ship.Animator.SetBool("IsAlive", false);
-	}
+            ship.Animator.SetBool( "IsHited", true );
+            ship.Animator.SetBool( "IsAlive", false );
+        }
+    }
 
-	public void hitShip(string number)
+    public void hitShip(string number)
 	{
 		// var ship = _ships.First( item => item.GetComponentInChildren<TextMesh>().text == number );
 
