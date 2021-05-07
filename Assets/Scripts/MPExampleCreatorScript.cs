@@ -17,6 +17,7 @@ public class MPExampleCreatorScript : MonoBehaviourPunCallbacks
 
     public void CreateExample()
     {
+        AnswerText.SetActive( false );
         if ( !PhotonNetwork.LocalPlayer.IsMasterClient ) {
             return;
         }
@@ -42,7 +43,6 @@ public class MPExampleCreatorScript : MonoBehaviourPunCallbacks
         var str = string.Format( "{0} {1} {2} = ?", first, operation, second );
         var answers = GetAnswerOptionsList(properties.From, properties.To, result );
 
-        AnswerText.SetActive( false );
         PhotonNetwork.CurrentRoom.SetCustomProperties( new ExitGames.Client.Photon.Hashtable { { "Example", str }, { "Answers", answers.ToArray() }, { "CorrectAnswer", result }, { "NewExample", true }, {CustomProperties.AnswerDone.ToString(), false} } );
     }
 
