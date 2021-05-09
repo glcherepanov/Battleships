@@ -5,7 +5,10 @@ public class DebugLoader
 	[RuntimeInitializeOnLoadMethod]
 	public static void Initialize()
 	{
-		GameObject consolePrefab = Resources.Load<GameObject>("IngameDebugConsole");
-		GameObject.Instantiate(consolePrefab);
+		if(!Application.isEditor && Debug.isDebugBuild)
+		{
+			GameObject consolePrefab = Resources.Load<GameObject>("IngameDebugConsole");
+			GameObject.Instantiate(consolePrefab);
+		}
 	}
 }
