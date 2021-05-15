@@ -26,7 +26,7 @@ public class EndGameController : MonoBehaviourPunCallbacks
 	private bool towersChanged = false;
 	private bool quitRequested = false;
 
-	private void Awake()
+	public void Awake()
 	{
 		shootingHelper.TowersChanged += OnTowersChanged;
 		endGameScreen.QuitRequested += OnQuitRequested;
@@ -75,9 +75,9 @@ public class EndGameController : MonoBehaviourPunCallbacks
 		}
 	}
 
-	private void ExitState(EndGameState nextState)
+	private void ExitState(EndGameState previousState)
 	{
-		switch(nextState)
+		switch(previousState)
 		{
 			case EndGameState.Playing:
 				break;

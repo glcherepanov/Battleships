@@ -8,121 +8,126 @@ using UnityEngine.UI;
 
 public class NetworkCreater : MonoBehaviourPunCallbacks
 {
-    public TMPro.TextMeshProUGUI StatusText;
-    public TMPro.TMP_InputField UserName;
-    public TMPro.TMP_InputField LobbyNameField;
-    public TMPro.TextMeshProUGUI HostName;
-    public TMPro.TextMeshProUGUI PlayerName;
-    public GameObject StartGameButton;
-    public GameObject SelectLevelButton;
+	public TMPro.TextMeshProUGUI StatusText;
 
-    public string levelJson;
-    private int _selected = 0;
+	public string levelJson;
 
-    // Start is called before the first frame update
-    void Start()
-    {
-        PhotonNetwork.NickName = "Player" + Random.Range(0, 10);
-        PhotonNetwork.ConnectUsingSettings();
-    }
+	[SerializeField]
+	private MenuController menuController = null;
 
-    public override void OnConnectedToMaster()
-    {
-        Log( "connectedToMaster" );
-    }
+	public void Start()
+	{
+		PhotonNetwork.NickName = "Player" + Random.Range(0, 10);
+		PhotonNetwork.ConnectUsingSettings();
 
-    public void CreateRoom()
-    {
-        PhotonNetwork.NickName = UserName.text;
-        PhotonNetwork.CreateRoom( LobbyNameField.textComponent.text, new Photon.Realtime.RoomOptions { MaxPlayers = 3 } );
+		menuController.PreLobbyScreen.LobbyCreateRequested += OnLobbyCreateRequested;
+		menuController.PreLobbyScreen.LobbyJoinRequested += OnLobbyJoinRequested;
 
-        Log( "CreatedRoom" );
-    }
+		menuController.LevelSelectionScreen.LevelSelectionRequested += OnLevelSelectionRequested;
+		
+		menuController.LobbyScreen.GameStartRequested += OnGameStartRequested;
+		menuController.LobbyScreen.LobbyExitRequested += OnLobbyExitRequested;
+	}
 
-    public void JoinRoom()
-    {
-        PhotonNetwork.NickName = UserName.text;
-        Log( "TryJoinRoom: " + LobbyNameField?.text ?? "empty" );
-        if ( PhotonNetwork.NetworkClientState == Photon.Realtime.ClientState.ConnectedToMasterServer )
-        {
-            PhotonNetwork.JoinRoom( LobbyNameField.textComponent.text );
-        }
-        else
-        {
-            Log( "Can`t join, status: " + PhotonNetwork.NetworkClientState.ToString() );
-        }
-    }
+	private void OnLobbyCreateRequested(LobbyCreateRequest request)
+	{
+		PhotonNetwork.NickName = request.PlayerName;
+		PhotonNetwork.CreateRoom(request.LobbyName, new RoomOptions { MaxPlayers = 3 });
 
-    public void LeaveLobby()
-    {
-        if ( PhotonNetwork.CurrentRoom != null )
-        {
-            PhotonNetwork.LeaveRoom();
-            Log( "Leave room: " + PhotonNetwork.CurrentRoom.Name );
-        }
-        else
-        {
-            Log( "Not in room" );
-        }
-    }
+		Log("CreatedRoom");
+	}
 
-    public override void OnJoinedRoom()
-    {
-        Log( "joined to room: " + PhotonNetwork.CurrentRoom.Name );
+	private void OnLobbyJoinRequested(LobbyJoinRequest request)
+	{
+		PhotonNetwork.NickName = request.PlayerName;
+		Log("TryJoinRoom: " + request.LobbyName ?? "empty");
+		if(PhotonNetwork.NetworkClientState == ClientState.ConnectedToMasterServer)
+		{
+			PhotonNetwork.JoinRoom(request.LobbyName);
+		}
+		else
+		{
+			Log("Can`t join, status: " + PhotonNetwork.NetworkClientState.ToString());
+		}
+	}
 
-        if ( PhotonNetwork.IsMasterClient )
-        {
-            HostName.text += PhotonNetwork.NickName;
-            StartGameButton.SetActive( true );
-            SelectLevelButton.SetActive( true );
-        }
-        else
-        {
-            HostName.text = "host: " + PhotonNetwork.MasterClient.NickName;
-            PlayerName.text = "player: " + PhotonNetwork.NickName;
-        }
-    }
+	private void OnLevelSelectionRequested(LevelSelectionRequest request)
+	{
+		levelJson = LevelsData.SetGameLevel(request.LevelId);
+		Debug.Log(levelJson);
+	}
 
-    public override void OnPlayerEnteredRoom( Player newPlayer )
-    {
-        PlayerName.text += newPlayer.NickName;
-    }
+	private void OnGameStartRequested()
+	{
+		PhotonNetwork.CurrentRoom.SetCustomProperties(new ExitGames.Client.Photon.Hashtable { { CustomProperties.StartGame.ToString(), true } });
+	}
 
-    public override void OnJoinRoomFailed( short returnCode, string message )
-    {
-        Log( "failed: " + message + " " + returnCode );
-    }
+	private void OnLobbyExitRequested()
+	{
+		if(PhotonNetwork.CurrentRoom != null)
+		{
+			PhotonNetwork.LeaveRoom();
+			Log("Leave room: " + PhotonNetwork.CurrentRoom.Name);
+		}
+		else
+		{
+			Log("Not in room");
+		}
+	}
 
-    public override void OnRoomPropertiesUpdate( ExitGames.Client.Photon.Hashtable propertiesThatChanged )
-    {
-        var Bool = PhotonNetwork.CurrentRoom.CustomProperties[ CustomProperties.StartGame.ToString() ];
-        Debug.Log(Bool.Equals( true ));
-        if ( Bool.Equals( true ) )
-        {
-            // string properties = JsonUtility.ToJson( level ); 
-            if ( string.IsNullOrEmpty( levelJson ) )
-            {
-                levelJson = LevelsData.SetGameLevel( 1 );
-            }
-            PhotonNetwork.CurrentRoom.SetCustomProperties( new ExitGames.Client.Photon.Hashtable { { CustomProperties.LevelProperties.ToString(), levelJson } } );
-            PhotonNetwork.LoadLevel( "Level" );
-        }
-    }
+	public override void OnConnectedToMaster()
+	{
+		Log("connectedToMaster");
+	}
 
-    public void StartGame()
-    {
-        PhotonNetwork.CurrentRoom.SetCustomProperties( new ExitGames.Client.Photon.Hashtable { { CustomProperties.StartGame.ToString(), true } } );
-    }
+	public override void OnJoinedRoom()
+	{
+		Log("joined to room: " + PhotonNetwork.CurrentRoom.Name);
 
-    private void Log( string message )
-    {
-        StatusText.text += "\n";
-        StatusText.text += message;
-    }
+		menuController.LobbyScreen.SetLobbyControl(allow: PhotonNetwork.IsMasterClient);
+		menuController.LobbyScreen.AddPlayer(PhotonNetwork.LocalPlayer.ActorNumber, PhotonNetwork.LocalPlayer.NickName, PhotonNetwork.LocalPlayer.IsMasterClient ? PlayerCategory.Owner : PlayerCategory.Normal);
+	}
 
-    public void SelectLevel( int id )
-    {
-        levelJson = LevelsData.SetGameLevel(id);
-        Debug.Log(levelJson);
-    }
+	public override void OnLeftRoom()
+	{
+		menuController.LobbyScreen.SetLobbyControl(allow: false);
+		menuController.LobbyScreen.RemovePlayer(PhotonNetwork.LocalPlayer.ActorNumber);
+	}
+
+	public override void OnPlayerEnteredRoom(Player newPlayer)
+	{
+		menuController.LobbyScreen.AddPlayer(newPlayer.ActorNumber, newPlayer.NickName, newPlayer.IsMasterClient ? PlayerCategory.Owner : PlayerCategory.Normal);
+	}
+
+	public override void OnPlayerLeftRoom(Player otherPlayer)
+	{
+		menuController.LobbyScreen.RemovePlayer(otherPlayer.ActorNumber);
+	}
+
+	public override void OnJoinRoomFailed(short returnCode, string message)
+	{
+		Log("failed: " + message + " " + returnCode);
+	}
+
+	public override void OnRoomPropertiesUpdate(ExitGames.Client.Photon.Hashtable propertiesThatChanged)
+	{
+		var Bool = PhotonNetwork.CurrentRoom.CustomProperties[CustomProperties.StartGame.ToString()];
+		Debug.Log(Bool.Equals(true));
+		if(Bool.Equals(true))
+		{
+			// string properties = JsonUtility.ToJson( level ); 
+			if(string.IsNullOrEmpty(levelJson))
+			{
+				levelJson = LevelsData.SetGameLevel(1);
+			}
+			PhotonNetwork.CurrentRoom.SetCustomProperties(new ExitGames.Client.Photon.Hashtable { { CustomProperties.LevelProperties.ToString(), levelJson } });
+			PhotonNetwork.LoadLevel("Level");
+		}
+	}
+
+	private void Log(string message)
+	{
+		StatusText.text += "\n";
+		StatusText.text += message;
+	}
 }
