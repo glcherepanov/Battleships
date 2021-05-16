@@ -1,15 +1,9 @@
 ﻿using Photon.Pun;
 using Photon.Realtime;
-using System.Collections;
-using System.Collections.Generic;
-using System.Linq;
 using UnityEngine;
-using UnityEngine.UI;
 
 public class NetworkCreater : MonoBehaviourPunCallbacks
 {
-	public TMPro.TextMeshProUGUI StatusText;
-
 	public string levelJson;
 
 	[SerializeField]
@@ -34,20 +28,24 @@ public class NetworkCreater : MonoBehaviourPunCallbacks
 		PhotonNetwork.NickName = request.PlayerName;
 		PhotonNetwork.CreateRoom(request.LobbyName, new RoomOptions { MaxPlayers = 3 });
 
-		Log("CreatedRoom");
+		menuController.LobbyScreen.LogLobbyCreated(request.LobbyName);
+		Debug.Log($"Room created: {request.LobbyName}");
 	}
 
 	private void OnLobbyJoinRequested(LobbyJoinRequest request)
 	{
 		PhotonNetwork.NickName = request.PlayerName;
-		Log("TryJoinRoom: " + request.LobbyName ?? "empty");
+		Debug.Log($"Attempting to join room: {request.LobbyName}");
+
 		if(PhotonNetwork.NetworkClientState == ClientState.ConnectedToMasterServer)
 		{
 			PhotonNetwork.JoinRoom(request.LobbyName);
+			menuController.LobbyScreen.LogLobbyJoined(request.LobbyName);
 		}
 		else
 		{
-			Log("Can`t join, status: " + PhotonNetwork.NetworkClientState.ToString());
+			Debug.Log($"Failed to join room, status: {PhotonNetwork.NetworkClientState}");
+			menuController.LobbyScreen.LogLobbyFailed(request.LobbyName);
 		}
 	}
 
@@ -67,23 +65,24 @@ public class NetworkCreater : MonoBehaviourPunCallbacks
 		if(PhotonNetwork.CurrentRoom != null)
 		{
 			PhotonNetwork.LeaveRoom();
-			Log("Leave room: " + PhotonNetwork.CurrentRoom.Name);
+			Debug.Log($"Left room: {PhotonNetwork.CurrentRoom.Name}");
 		}
 		else
 		{
-			Log("Not in room");
+			Debug.Log("Can't leave room, not in any room");
 		}
 	}
 
 	public override void OnConnectedToMaster()
 	{
-		Log("connectedToMaster");
+		Debug.Log("Connected to master");
 	}
 
 	public override void OnJoinedRoom()
 	{
-		Log("joined to room: " + PhotonNetwork.CurrentRoom.Name);
+		Debug.Log($"Joined room: {PhotonNetwork.CurrentRoom.Name}");
 
+		menuController.LobbyScreen.SetLobbyName(PhotonNetwork.CurrentRoom.Name);
 		menuController.LobbyScreen.SetLobbyControl(allow: PhotonNetwork.IsMasterClient);
 		menuController.LobbyScreen.AddPlayer(PhotonNetwork.LocalPlayer.ActorNumber, PhotonNetwork.LocalPlayer.NickName, PhotonNetwork.LocalPlayer.IsMasterClient ? PlayerCategory.Owner : PlayerCategory.Normal);
 	}
@@ -96,17 +95,20 @@ public class NetworkCreater : MonoBehaviourPunCallbacks
 
 	public override void OnPlayerEnteredRoom(Player newPlayer)
 	{
-		menuController.LobbyScreen.AddPlayer(newPlayer.ActorNumber, newPlayer.NickName, newPlayer.IsMasterClient ? PlayerCategory.Owner : PlayerCategory.Normal);
+		var playerCategory = newPlayer.IsMasterClient ? PlayerCategory.Owner : PlayerCategory.Normal;
+		menuController.LobbyScreen.AddPlayer(newPlayer.ActorNumber, newPlayer.NickName, playerCategory);
+		menuController.LobbyScreen.LogPlayerJoined(newPlayer.NickName);
 	}
 
 	public override void OnPlayerLeftRoom(Player otherPlayer)
 	{
 		menuController.LobbyScreen.RemovePlayer(otherPlayer.ActorNumber);
+		menuController.LobbyScreen.LogPlayerLeft(otherPlayer.NickName);
 	}
 
 	public override void OnJoinRoomFailed(short returnCode, string message)
 	{
-		Log("failed: " + message + " " + returnCode);
+		Debug.Log($"Failed to join room: {message} {returnCode}");
 	}
 
 	public override void OnRoomPropertiesUpdate(ExitGames.Client.Photon.Hashtable propertiesThatChanged)
@@ -123,11 +125,5 @@ public class NetworkCreater : MonoBehaviourPunCallbacks
 			PhotonNetwork.CurrentRoom.SetCustomProperties(new ExitGames.Client.Photon.Hashtable { { CustomProperties.LevelProperties.ToString(), levelJson } });
 			PhotonNetwork.LoadLevel("Level");
 		}
-	}
-
-	private void Log(string message)
-	{
-		StatusText.text += "\n";
-		StatusText.text += message;
 	}
 }

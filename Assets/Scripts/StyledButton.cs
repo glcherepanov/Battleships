@@ -35,6 +35,12 @@ public class StyledButton : MonoBehaviour, IPointerDownHandler, IPointerUpHandle
 	private Color normalColor = Color.white;
 	[SerializeField]
 	private Color pressedColor = Color.grey;
+	[SerializeField]
+	private Color shadowColor = Color.black;
+
+	[SerializeField]
+	[Min(0.0f)]
+	private float radius = 30.0f;
 
 	private ButtonState currentState = ButtonState.None;
 
@@ -105,7 +111,15 @@ public class StyledButton : MonoBehaviour, IPointerDownHandler, IPointerUpHandle
 
 		if(targetBackground != null)
 		{
+			targetBackground.RoundedProperties.Type = ThisOtherThing.UI.ShapeUtils.RoundedRects.RoundedProperties.RoundedType.Uniform;
+			targetBackground.RoundedProperties.UniformRadius = radius;
+
 			targetBackground.ShapeProperties.FillColor = GetColorForState(currentState);
+			for(int i = 0; i < targetBackground.ShadowProperties.Shadows.Length; ++i)
+			{
+				var shadow = targetBackground.ShadowProperties.Shadows[i];
+				shadow.Color = shadowColor;
+			}
 			targetBackground.ForceMeshUpdate();
 		}
 	}

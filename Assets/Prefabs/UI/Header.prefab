@@ -67,7 +67,7 @@ MonoBehaviour:
   ShapeProperties:
     FillColor:
       serializedVersion: 2
-      rgba: 1942275268
+      rgba: 4292993246
     DrawFill: 1
     DrawFillShadow: 1
     DrawOutline: 0
@@ -246,7 +246,7 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 72
+  m_fontSize: 47.4
   m_fontSizeBase: 75
   m_fontWeight: 400
   m_enableAutoSizing: 1

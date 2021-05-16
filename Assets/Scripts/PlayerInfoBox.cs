@@ -22,8 +22,19 @@ public class PlayerInfoBox : MonoBehaviour
 
 	public void SetPlayerInfo(string playerName, PlayerCategory playerCategory)
 	{
-		playerCategoryLabel.text = PlayerCategoryToLabel(playerCategory);
+		playerCategoryLabel.text = FormatPlayerCategoryLabel(playerCategory);
 		playerNameLabel.text = playerName;
+	}
+
+	private string FormatPlayerCategoryLabel(PlayerCategory playerCategory)
+	{
+		string label = PlayerCategoryToLabel(playerCategory);
+		if(label.Length != 0)
+		{
+			label += ":";
+		}
+
+		return label;
 	}
 
 	private string PlayerCategoryToLabel(PlayerCategory playerCategory)

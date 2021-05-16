@@ -121,8 +121,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   targetBackground: {fileID: 5338857655825984974}
-  normalColor: {r: 1, g: 1, b: 1, a: 1}
-  pressedColor: {r: 0.5, g: 0.5, b: 0.5, a: 1}
+  normalColor: {r: 0.9176471, g: 0.9215687, b: 0.94117653, a: 1}
+  pressedColor: {r: 0.8352942, g: 0.83921576, b: 0.85098046, a: 1}
+  shadowColor: {r: 0.8352942, g: 0.83921576, b: 0.85098046, a: 1}
+  radius: 52.6
 --- !u!114 &706494321583456832
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -210,7 +212,7 @@ MonoBehaviour:
   ShapeProperties:
     FillColor:
       serializedVersion: 2
-      rgba: 4294967295
+      rgba: 4293979114
     DrawFill: 1
     DrawFillShadow: 1
     DrawOutline: 0
@@ -221,7 +223,7 @@ MonoBehaviour:
   RoundedProperties:
     Type: 1
     ResolutionMode: 0
-    UniformRadius: 20
+    UniformRadius: 52.6
     UseMaxRadius: 0
     TLRadius: 15
     TLResolution:
@@ -258,7 +260,7 @@ MonoBehaviour:
     Shadows:
     - Color:
         serializedVersion: 2
-        rgba: 2013265920
+        rgba: 4292466389
       Offset: {x: 0, y: -11.3}
       Size: 0
       Softness: 0
