@@ -60,13 +60,25 @@ public class LobbyScreen : MonoBehaviour
 
 		if(allowLobbyControl)
 		{
-			startGameButton.gameObject.SetActive(true);
-			selectLevelButton.gameObject.SetActive(true);
+			if(startGameButton != null)
+			{
+				startGameButton.gameObject.SetActive(true);
+			}
+			if(selectLevelButton != null)
+			{
+				selectLevelButton.gameObject.SetActive(true);
+			}
 		}
 		else
 		{
-			startGameButton.gameObject.SetActive(false);
-			selectLevelButton.gameObject.SetActive(false);
+			if(startGameButton != null)
+			{
+				startGameButton.gameObject.SetActive(false);
+			}
+			if(selectLevelButton != null)
+			{
+				selectLevelButton.gameObject.SetActive(false);
+			}
 		}
 	}
 
@@ -99,7 +111,7 @@ public class LobbyScreen : MonoBehaviour
 	{
 		GameStartRequested?.Invoke();
 	}
-	
+
 	private void SelectLevelClicked()
 	{
 		menuController.GoToLocation(MenuLocation.LevelSelection);

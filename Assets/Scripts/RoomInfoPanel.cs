@@ -66,6 +66,11 @@ public class RoomInfoPanel : MonoBehaviour
 		int i = infos.FindIndex(info => info.PlayerId == playerId);
 		if(i != -1)
 		{
+			var info = infos[i];
+			if(info.InfoBox != null)
+			{
+				Destroy(info.InfoBox);
+			}
 			infos.RemoveAt(i);
 			SortInfo();
 		}
@@ -74,9 +79,15 @@ public class RoomInfoPanel : MonoBehaviour
 	private void SortInfo()
 	{
 		infos.Sort(new PlayerInfoComparer());
+		int aliveIndex = 0;
+
 		for(int i = 0; i < infos.Count; ++i)
 		{
-			infos[i].InfoBox.transform.SetSiblingIndex(i);
+			var box = infos[i].InfoBox;
+			if(box != null)
+			{
+				box.transform.SetSiblingIndex(aliveIndex++);
+			}
 		}
 	}
 }
