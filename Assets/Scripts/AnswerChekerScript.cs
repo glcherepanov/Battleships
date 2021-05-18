@@ -20,11 +20,11 @@ public class AnswerChekerScript : MonoBehaviour
     {
         if ( _exampleCreator.Result == int.Parse( answer.text ) )
         {
-            _shipMovingHelper.crushShip( answer.text );
+            _shipMovingHelper.CrushShip( answer.text );
         }
         else
         {
-            _shipMovingHelper.hitShip( answer.text );
+            _shipMovingHelper.HitShip( answer.text );
         }
     }
 }

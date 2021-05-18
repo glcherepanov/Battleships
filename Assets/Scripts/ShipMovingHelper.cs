@@ -1,6 +1,7 @@
 ﻿using Photon.Pun;
 using System.Collections.Generic;
 using System.Linq;
+using TMPro;
 using UnityEngine;
 
 public class ShipMovingHelper : MonoBehaviourPunCallbacks
@@ -11,7 +12,7 @@ public class ShipMovingHelper : MonoBehaviourPunCallbacks
 	{
 		public GameObject GameObject;
 		public Animator Animator;
-		public TextMesh Text;
+		public TextMeshPro Text;
 	}
 
 	[SerializeField]
@@ -82,18 +83,18 @@ public class ShipMovingHelper : MonoBehaviourPunCallbacks
 		}
 	}
 
-    public void crushShip( string number )
-    {
-        if ( PhotonNetwork.IsMasterClient )
-        {
-            Ship ship = ships.First( s => s.Text.text == number );
+	public void CrushShip(string number)
+	{
+		if(PhotonNetwork.IsMasterClient)
+		{
+			Ship ship = ships.First(s => s.Text.text == number);
 
-            ship.Animator.SetBool( "IsHited", true );
-            ship.Animator.SetBool( "IsAlive", false );
-        }
-    }
+			ship.Animator.SetBool("IsHited", true);
+			ship.Animator.SetBool("IsAlive", false);
+		}
+	}
 
-    public void hitShip(string number)
+	public void HitShip(string number)
 	{
 		// var ship = _ships.First( item => item.GetComponentInChildren<TextMesh>().text == number );
 
@@ -110,7 +111,7 @@ public class ShipMovingHelper : MonoBehaviourPunCallbacks
 			{
 				GameObject = shipObject,
 				Animator = shipObject.GetComponent<Animator>(),
-				Text = shipObject.GetComponentInChildren<TextMesh>()
+				Text = shipObject.GetComponentInChildren<TextMeshPro>()
 			};
 			ships.Add(ship);
 		}

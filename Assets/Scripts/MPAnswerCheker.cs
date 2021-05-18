@@ -75,7 +75,7 @@ public class MPAnswerCheker : MonoBehaviourPunCallbacks
 					string playerName = PlayerNameUtility.GetName(player);
 					gameInterfaceController.ExampleScreen.ShowResult(playerName, isCorrect: true);
 
-					_shipMovingHelper.crushShip(answerObject.Target);
+					_shipMovingHelper.CrushShip(answerObject.Target);
 					PhotonNetwork.CurrentRoom.SetCustomProperties(new ExitGames.Client.Photon.Hashtable { { CustomProperties.AnswerDone.ToString(), true } });
 					Debug.Log(answerDone);
 					_wait = true;
@@ -84,7 +84,7 @@ public class MPAnswerCheker : MonoBehaviourPunCallbacks
 				}
 				else
 				{
-					_shipMovingHelper.hitShip((string)propertiesThatChanged["AnswerNumber"]);
+					_shipMovingHelper.HitShip((string)propertiesThatChanged["AnswerNumber"]);
 				}
 			}
 		}
