@@ -42,10 +42,9 @@ public class PlayerInfoBox : MonoBehaviour
 		switch(playerCategory)
 		{
 			case PlayerCategory.Owner:
-				return "room owner";
+				return "Владелец комнаты";
 			default:
-				return "player";
-			
+				return "Посетитель комнаты";
 		}
 	}
 }

@@ -10,7 +10,7 @@ public class EndGameController : MonoBehaviourPunCallbacks
 		None,
 		Playing,
 		End,
-		Quitting
+		Exiting
 	}
 
 	private const string MainMenuScene = "MainMenu";
@@ -19,17 +19,18 @@ public class EndGameController : MonoBehaviourPunCallbacks
 	private ShootingHelper shootingHelper = null;
 
 	[SerializeField]
-	private EndGameScreen endGameScreen = null;
+	private GameInterfaceController gameInterfaceController = null;
 
 	private EndGameState currentState = EndGameState.None;
 
 	private bool towersChanged = false;
-	private bool quitRequested = false;
+	private bool exitRequested = false;
 
 	public void Awake()
 	{
 		shootingHelper.TowersChanged += OnTowersChanged;
-		endGameScreen.QuitRequested += OnQuitRequested;
+		gameInterfaceController.EndGameScreen.ExitRequested += OnExitRequested;
+		gameInterfaceController.IngameMenuScreen.ExitRequested += OnExitRequested;
 
 		TransitionToState(EndGameState.Playing);
 	}
@@ -43,7 +44,7 @@ public class EndGameController : MonoBehaviourPunCallbacks
 			case EndGameState.End:
 				if(!shootingHelper.AnyHostTowersAlive && !shootingHelper.AnyPlayerTowersAlive)
 				{
-					endGameScreen.Show(new EndGameDisplayResult
+					gameInterfaceController.EndGameScreen.Show(new EndGameDisplayResult
 					{
 						Status = EndGameStatus.Tied
 					});
@@ -53,22 +54,22 @@ public class EndGameController : MonoBehaviourPunCallbacks
 					bool isThisTowerAlive = IsThisPlayerHost() ? shootingHelper.AnyHostTowersAlive : shootingHelper.AnyPlayerTowersAlive;
 					if(isThisTowerAlive)
 					{
-						endGameScreen.Show(new EndGameDisplayResult
+						gameInterfaceController.EndGameScreen.Show(new EndGameDisplayResult
 						{
 							Status = EndGameStatus.Won
 						});
 					}
 					else
 					{
-						endGameScreen.Show(new EndGameDisplayResult
+						gameInterfaceController.EndGameScreen.Show(new EndGameDisplayResult
 						{
 							Status = EndGameStatus.Lost
 						});
 					}
 				}
 				break;
-			case EndGameState.Quitting:
-				endGameScreen.Hide();
+			case EndGameState.Exiting:
+				gameInterfaceController.EndGameScreen.Hide();
 				PhotonNetwork.DestroyPlayerObjects(PhotonNetwork.LocalPlayer);
 				PhotonNetwork.Disconnect();
 				break;
@@ -83,7 +84,7 @@ public class EndGameController : MonoBehaviourPunCallbacks
 				break;
 			case EndGameState.End:
 				break;
-			case EndGameState.Quitting:
+			case EndGameState.Exiting:
 				break;
 		}
 	}
@@ -93,6 +94,12 @@ public class EndGameController : MonoBehaviourPunCallbacks
 		switch(state)
 		{
 			case EndGameState.Playing:
+				// This transition happens when we click exit in the ingame menu.
+				if(exitRequested)
+				{
+					TransitionToState(EndGameState.Exiting);
+				}
+
 				if(towersChanged)
 				{
 					if(!shootingHelper.AnyHostTowersAlive || !shootingHelper.AnyPlayerTowersAlive)
@@ -102,17 +109,17 @@ public class EndGameController : MonoBehaviourPunCallbacks
 				}
 				break;
 			case EndGameState.End:
-				if(quitRequested)
+				if(exitRequested)
 				{
-					TransitionToState(EndGameState.Quitting);
+					TransitionToState(EndGameState.Exiting);
 				}
 				break;
-			case EndGameState.Quitting:
+			case EndGameState.Exiting:
 				break;
 		}
 
 		towersChanged = false;
-		quitRequested = false;
+		exitRequested = false;
 	}
 
 	private void TransitionToState(EndGameState nextState)
@@ -136,9 +143,9 @@ public class EndGameController : MonoBehaviourPunCallbacks
 		UpdateState(currentState);
 	}
 
-	private void OnQuitRequested()
+	private void OnExitRequested()
 	{
-		quitRequested = true;
+		exitRequested = true;
 		UpdateState(currentState);
 	}
 

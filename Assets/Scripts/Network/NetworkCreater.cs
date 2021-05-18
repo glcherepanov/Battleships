@@ -84,7 +84,8 @@ public class NetworkCreater : MonoBehaviourPunCallbacks
 
 		menuController.LobbyScreen.SetLobbyName(PhotonNetwork.CurrentRoom.Name);
 		menuController.LobbyScreen.SetLobbyControl(allow: PhotonNetwork.IsMasterClient);
-		menuController.LobbyScreen.AddPlayer(PhotonNetwork.LocalPlayer.ActorNumber, PhotonNetwork.LocalPlayer.NickName, PhotonNetwork.LocalPlayer.IsMasterClient ? PlayerCategory.Owner : PlayerCategory.Normal);
+		string playerName = PlayerNameUtility.GetName(PhotonNetwork.LocalPlayer);
+		menuController.LobbyScreen.AddPlayer(PhotonNetwork.LocalPlayer.ActorNumber, playerName, PhotonNetwork.LocalPlayer.IsMasterClient ? PlayerCategory.Owner : PlayerCategory.Normal);
 	}
 
 	public override void OnLeftRoom()
@@ -96,14 +97,16 @@ public class NetworkCreater : MonoBehaviourPunCallbacks
 	public override void OnPlayerEnteredRoom(Player newPlayer)
 	{
 		var playerCategory = newPlayer.IsMasterClient ? PlayerCategory.Owner : PlayerCategory.Normal;
-		menuController.LobbyScreen.AddPlayer(newPlayer.ActorNumber, newPlayer.NickName, playerCategory);
-		menuController.LobbyScreen.LogPlayerJoined(newPlayer.NickName);
+		string playerName = PlayerNameUtility.GetName(newPlayer);
+		menuController.LobbyScreen.AddPlayer(newPlayer.ActorNumber, playerName, playerCategory);
+		menuController.LobbyScreen.LogPlayerJoined(playerName);
 	}
 
 	public override void OnPlayerLeftRoom(Player otherPlayer)
 	{
+		string playerName = PlayerNameUtility.GetName(otherPlayer);
 		menuController.LobbyScreen.RemovePlayer(otherPlayer.ActorNumber);
-		menuController.LobbyScreen.LogPlayerLeft(otherPlayer.NickName);
+		menuController.LobbyScreen.LogPlayerLeft(playerName);
 	}
 
 	public override void OnJoinRoomFailed(short returnCode, string message)

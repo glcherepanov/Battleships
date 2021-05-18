@@ -1,8 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using UnityEngine;
 using TMPro;
 using UnityEngine.UI;
@@ -22,6 +18,9 @@ public class EndGameDisplayResult
 public class EndGameScreen : MonoBehaviour
 {
 	[SerializeField]
+	private RectTransform panelRoot = null;
+
+	[SerializeField]
 	private string winLabel = "you won";
 	[SerializeField]
 	private string lossLabel = "you lost";
@@ -29,28 +28,28 @@ public class EndGameScreen : MonoBehaviour
 	private string tieLabel = "tied";
 
 	[SerializeField]
-	private TextMeshProUGUI winStatus = null;
+	private TextMeshProUGUI winStatusLabel = null;
 	[SerializeField]
-	private Button quitButton = null;
+	private Button exitButton = null;
 
-	public event Action QuitRequested;
+	public event Action ExitRequested;
 
-	private void Awake()
+	public void Awake()
 	{
-		quitButton.onClick.AddListener(OnQuitClicked);
+		exitButton.onClick.AddListener(OnExitClicked);
 
 		Hide();
 	}
 
-	private void OnQuitClicked()
+	private void OnExitClicked()
 	{
-		QuitRequested?.Invoke();
+		ExitRequested?.Invoke();
 	}
 
 	public void Show(EndGameDisplayResult result)
 	{
-		winStatus.text = GetLabelForStatus(result.Status);
-		gameObject.SetActive(true);
+		winStatusLabel.text = GetLabelForStatus(result.Status);
+		panelRoot.gameObject.SetActive(true);
 	}
 
 	private string GetLabelForStatus(EndGameStatus status)
@@ -70,6 +69,6 @@ public class EndGameScreen : MonoBehaviour
 
 	public void Hide()
 	{
-		gameObject.SetActive(false);
+		panelRoot.gameObject.SetActive(false);
 	}
 }

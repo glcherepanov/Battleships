@@ -5,6 +5,7 @@ using UnityEngine.UI;
 
 [ExecuteAlways]
 [RequireComponent(typeof(Button))]
+[DefaultExecutionOrder(-10)]
 public class StyledButton : MonoBehaviour
 {
 	private enum ButtonState
@@ -35,10 +36,6 @@ public class StyledButton : MonoBehaviour
 	[SerializeField]
 	private Color shadowColor = Color.black;
 
-	[SerializeField]
-	[Min(0.0f)]
-	private float radius = 30.0f;
-
 	public void OnEnable()
 	{
 		SetDirty();
@@ -55,9 +52,6 @@ public class StyledButton : MonoBehaviour
 
 		if(targetBackground != null)
 		{
-			targetBackground.RoundedProperties.Type = ThisOtherThing.UI.ShapeUtils.RoundedRects.RoundedProperties.RoundedType.Uniform;
-			targetBackground.RoundedProperties.UniformRadius = radius;
-
 			targetBackground.ShapeProperties.FillColor = normalColor;
 			for(int i = 0; i < targetBackground.ShadowProperties.Shadows.Length; ++i)
 			{

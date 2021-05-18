@@ -80,6 +80,6 @@ public class LevelButton : MonoBehaviour
 
 	private string FormatLevelDescription(int upperBound)
 	{
-		return $"to {upperBound}";
+		return $"до {upperBound}";
 	}
 }

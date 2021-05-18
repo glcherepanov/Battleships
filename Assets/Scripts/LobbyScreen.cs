@@ -35,7 +35,7 @@ public class LobbyScreen : MonoBehaviour
 		selectLevelButton.onClick.AddListener(SelectLevelClicked);
 		exitButton.onClick.AddListener(ExitClicked);
 
-		SetLobbyName("Game room");
+		SetLobbyName("Комната");
 		SetLobbyControl(false);
 	}
 
@@ -84,27 +84,27 @@ public class LobbyScreen : MonoBehaviour
 
 	public void LogLobbyJoined(string lobbyName)
 	{
-		lobbyLogPanel.Log($"Room joined: {lobbyName}");
+		lobbyLogPanel.Log($"Подключение к комнате: {lobbyName}");
 	}
 
 	public void LogLobbyCreated(string lobbyName)
 	{
-		lobbyLogPanel.Log($"Room created: {lobbyName}");
+		lobbyLogPanel.Log($"Комната создана: {lobbyName}");
 	}
 
 	public void LogLobbyFailed(string lobbyName)
 	{
-		lobbyLogPanel.Log($"Failed to join room {lobbyName}");
+		lobbyLogPanel.Log($"Не удалось подключиться к комнате: {lobbyName}");
 	}
 
 	public void LogPlayerJoined(string playerName)
 	{
-		lobbyLogPanel.Log($"Player joined - {playerName}");
+		lobbyLogPanel.Log($"Подключился игрок - {playerName}");
 	}
 
 	public void LogPlayerLeft(string playerName)
 	{
-		lobbyLogPanel.Log($"{playerName} left the room");
+		lobbyLogPanel.Log($"{playerName} покинул комнату");
 	}
 
 	private void StartGameClicked()

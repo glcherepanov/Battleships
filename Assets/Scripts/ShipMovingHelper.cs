@@ -26,24 +26,15 @@ public class ShipMovingHelper : MonoBehaviourPunCallbacks
 	[SerializeField]
 	private List<Transform> positionPoints = new List<Transform>();
 
-	//private List<Vector3> Positions = new List<Vector3>()
-	//{
-	//	new Vector3( -77, 0, -40 ),
-	//	new Vector3( -20, 0, 0 ),
-	//	new Vector3( -33, 0, -23 ),
-	//	new Vector3( -70, 0, 6 ),
-	//	new Vector3( -35, 0, 35 ),
-	//};
-
 	private List<Ship> ships = new List<Ship>();
 	private System.Random random = null;
 
-	private void Awake()
+	public void Awake()
 	{
 		random = new System.Random(unchecked(System.Environment.TickCount * 31));
 	}
 
-	void Update()
+	public void Update()
 	{
 		if(!PhotonNetwork.IsMasterClient)
 		{
