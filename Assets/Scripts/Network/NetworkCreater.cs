@@ -28,6 +28,7 @@ public class NetworkCreater : MonoBehaviourPunCallbacks
 		PhotonNetwork.NickName = request.PlayerName;
 		PhotonNetwork.CreateRoom(request.LobbyName, new RoomOptions { MaxPlayers = 3 });
 
+		menuController.LobbyScreen.SetLobbyName(request.LobbyName);
 		menuController.LobbyScreen.LogLobbyCreated(request.LobbyName);
 		Debug.Log($"Room created: {request.LobbyName}");
 	}
@@ -35,6 +36,8 @@ public class NetworkCreater : MonoBehaviourPunCallbacks
 	private void OnLobbyJoinRequested(LobbyJoinRequest request)
 	{
 		PhotonNetwork.NickName = request.PlayerName;
+		menuController.LobbyScreen.SetLobbyName(request.LobbyName);
+
 		Debug.Log($"Attempting to join room: {request.LobbyName}");
 
 		if(PhotonNetwork.NetworkClientState == ClientState.ConnectedToMasterServer)
@@ -82,16 +85,20 @@ public class NetworkCreater : MonoBehaviourPunCallbacks
 	{
 		Debug.Log($"Joined room: {PhotonNetwork.CurrentRoom.Name}");
 
-		menuController.LobbyScreen.SetLobbyName(PhotonNetwork.CurrentRoom.Name);
 		menuController.LobbyScreen.SetLobbyControl(allow: PhotonNetwork.IsMasterClient);
-		string playerName = PlayerNameUtility.GetName(PhotonNetwork.LocalPlayer);
-		menuController.LobbyScreen.AddPlayer(PhotonNetwork.LocalPlayer.ActorNumber, playerName, PhotonNetwork.LocalPlayer.IsMasterClient ? PlayerCategory.Owner : PlayerCategory.Normal);
+
+		foreach(Player player in PhotonNetwork.CurrentRoom.Players.Values)
+		{
+			string playerName = PlayerNameUtility.GetName(player);
+			menuController.LobbyScreen.AddPlayer(player.ActorNumber, playerName, player.IsMasterClient ? PlayerCategory.Owner : PlayerCategory.Normal);
+		}
 	}
 
 	public override void OnLeftRoom()
 	{
 		menuController.LobbyScreen.SetLobbyControl(allow: false);
-		menuController.LobbyScreen.RemovePlayer(PhotonNetwork.LocalPlayer.ActorNumber);
+		menuController.LobbyScreen.ClearPlayers();
+		menuController.LobbyScreen.ClearLogs();
 	}
 
 	public override void OnPlayerEnteredRoom(Player newPlayer)

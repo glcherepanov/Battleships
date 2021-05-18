@@ -1,6 +1,7 @@
 ﻿using Photon.Pun;
 using System.Collections.Generic;
 using System.Linq;
+using TMPro;
 using UnityEngine;
 
 public class MPExampleCreatorScript : MonoBehaviourPunCallbacks
@@ -16,8 +17,6 @@ public class MPExampleCreatorScript : MonoBehaviourPunCallbacks
 
 	public void CreateExample()
 	{
-		gameInterfaceController.ExampleScreen.HideResult();
-
 		if(!PhotonNetwork.LocalPlayer.IsMasterClient)
 		{
 			return;
@@ -65,9 +64,12 @@ public class MPExampleCreatorScript : MonoBehaviourPunCallbacks
 				FillButtons(_answers);
 				FillShips(_answers);
 
+				gameInterfaceController.ExampleScreen.HideResult();
+				gameInterfaceController.ExampleScreen.SetExampleExpression((string)PhotonNetwork.CurrentRoom.CustomProperties["Example"]);
+
 				if(propertiesThatChanged.TryGetValue("Example", out object example))
 				{
-					gameInterfaceController.ExampleScreen.SetExampleExpression((string)example);
+					
 				}
 			}
 		}
@@ -138,7 +140,7 @@ public class MPExampleCreatorScript : MonoBehaviourPunCallbacks
 		answerOptionsList = new List<int>(answerOptionsList);
 		foreach(var text in GameObject.FindGameObjectsWithTag("answerShipText"))
 		{
-			text.GetComponent<TextMesh>().text = answerOptionsList.First().ToString();
+			text.GetComponent<TextMeshPro>().text = answerOptionsList.First().ToString();
 			answerOptionsList.Remove(answerOptionsList.First());
 		}
 	}

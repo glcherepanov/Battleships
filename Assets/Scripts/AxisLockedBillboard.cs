@@ -25,6 +25,6 @@ public class AxisLockedBillboard : MonoBehaviour
 		Vector3 projected = Camera.transform.forward;
 		projected.y = 0;
 		projected.Normalize();
-		transform.rotation = Quaternion.LookRotation(projected, Vector3.up);
+		transform.rotation = Quaternion.LookRotation(-projected, Vector3.up);
 	}
 }

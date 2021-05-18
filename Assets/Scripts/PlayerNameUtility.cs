@@ -4,6 +4,11 @@ public static class PlayerNameUtility
 {
 	public static string GetName(Player player)
 	{
+		if(player == null)
+		{
+			return "player";
+		}
+
 		if(player.NickName.Length != 0)
 		{
 			return player.NickName;

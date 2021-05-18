@@ -1,6 +1,7 @@
 ﻿using Photon.Pun;
 using System;
 using System.Linq;
+using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -15,7 +16,7 @@ public class ShootingHelper : MonoBehaviourPunCallbacks
 
 	public void Shoot(string player, string target)
 	{
-		_ship = GameObject.FindGameObjectsWithTag("ship").Where(item => item.GetComponentInChildren<TextMesh>().text == target).First();
+		_ship = GameObject.FindGameObjectsWithTag("ship").Where(item => item.GetComponentInChildren<TextMeshPro>().text == target).First();
 		_tower = GameObject.FindGameObjectsWithTag(player).Where(item => item.GetComponent<IslandScript>().IsAlive).First();
 
 		_tower.GetComponentInChildren<ShootScript>().MakeShoot(_ship);
@@ -27,16 +28,10 @@ public class ShootingHelper : MonoBehaviourPunCallbacks
 		{
 			GameObject.FindGameObjectsWithTag(player);
 			PhotonNetwork.CurrentRoom.SetCustomProperties(new ExitGames.Client.Photon.Hashtable { { CustomProperties.MoveShips.ToString(), false } });
-			//_winWindow.SetActive(true);
-			var hostName = GameObject.FindGameObjectsWithTag("hostName").First().GetComponent<TextMesh>().text;
-			var noHostName = GameObject.FindGameObjectsWithTag("playerName").First().GetComponent<TextMesh>().text;
-
-			string message = String.Format("Победил игрок - {0}\nПроиграл игрок - {1}", player == "host" ? hostName : noHostName, player != "host" ? hostName : noHostName);
-			Debug.Log(message);
 		}
 
-		var tower = GameObject.FindGameObjectsWithTag(player).Where(item => item.GetComponent<IslandScript>().IsAlive).First();
-		tower.GetComponent<IslandScript>().Crash();
+		var tower = GameObject.FindGameObjectsWithTag(player).Where(item => item.GetComponent<IslandScript>().IsAlive).FirstOrDefault();
+		if(tower != null) tower.GetComponent<IslandScript>().Crash();
 
 		OnTowersChanged();
 	}
@@ -47,17 +42,17 @@ public class ShootingHelper : MonoBehaviourPunCallbacks
 			&& GameObject.FindGameObjectsWithTag("playerTower").Where(item => item.GetComponent<IslandScript>().IsAlive).ToList().Count == 1)
 		{
 			PhotonNetwork.CurrentRoom.SetCustomProperties(new ExitGames.Client.Photon.Hashtable { { CustomProperties.MoveShips.ToString(), false } });
-			Debug.Log("ничья");
 		}
-		var tower = GameObject.FindGameObjectsWithTag("hostTower").Where(item => item.GetComponent<IslandScript>().IsAlive).First();
-		tower.GetComponent<IslandScript>().Crash();
-		tower = GameObject.FindGameObjectsWithTag("playerTower").Where(item => item.GetComponent<IslandScript>().IsAlive).First();
-		tower.GetComponent<IslandScript>().Crash();
+
+		var tower = GameObject.FindGameObjectsWithTag("hostTower").Where(item => item.GetComponent<IslandScript>().IsAlive).FirstOrDefault();
+		if(tower != null) tower.GetComponent<IslandScript>().Crash();
+		tower = GameObject.FindGameObjectsWithTag("playerTower").Where(item => item.GetComponent<IslandScript>().IsAlive).FirstOrDefault();
+		if(tower != null) tower.GetComponent<IslandScript>().Crash();
 
 		OnTowersChanged();
 	}
 
-	public void Respanw()
+	public void Respawn()
 	{
 		_tower.GetComponentInChildren<ShootScript>().Respawn();
 	}

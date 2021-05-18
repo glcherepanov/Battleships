@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using Photon.Pun.Demo.Cockpit;
+using System.Collections.Generic;
 using UnityEngine;
 
 public class RoomInfoPanel : MonoBehaviour
@@ -73,6 +74,19 @@ public class RoomInfoPanel : MonoBehaviour
 			}
 			infos.RemoveAt(i);
 			SortInfo();
+		}
+	}
+
+	public void ClearPlayers()
+	{
+		for(int i = infos.Count - 1; i >=0; --i)
+		{
+			var info = infos[i];
+			if(info.InfoBox != null)
+			{
+				Destroy(info.InfoBox);
+			}
+			infos.RemoveAt(i);
 		}
 	}
 

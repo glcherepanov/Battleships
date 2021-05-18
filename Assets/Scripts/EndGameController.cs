@@ -97,11 +97,12 @@ public class EndGameController : MonoBehaviourPunCallbacks
 				// This transition happens when we click exit in the ingame menu.
 				if(exitRequested)
 				{
+					exitRequested = false;
 					TransitionToState(EndGameState.Exiting);
 				}
-
-				if(towersChanged)
+				else if(towersChanged)
 				{
+					towersChanged = false;
 					if(!shootingHelper.AnyHostTowersAlive || !shootingHelper.AnyPlayerTowersAlive)
 					{
 						TransitionToState(EndGameState.End);

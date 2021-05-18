@@ -19,7 +19,7 @@ public class GameManagerScript : MonoBehaviourPunCallbacks
 			PhotonNetwork.CurrentRoom.SetCustomProperties(new ExitGames.Client.Photon.Hashtable { { CustomProperties.MoveShips.ToString(), true } });
 			
 			hostIndicator.SetPlayerName(PlayerNameUtility.GetName(PhotonNetwork.LocalPlayer));
-			playerIndicator.SetPlayerName(PlayerNameUtility.GetName(PhotonNetwork.CurrentRoom.Players.First(p => !p.Value.IsMasterClient).Value));
+			playerIndicator.SetPlayerName(PlayerNameUtility.GetName(PhotonNetwork.CurrentRoom.Players.FirstOrDefault(p => !p.Value.IsMasterClient).Value));
 		}
 		else
 		{

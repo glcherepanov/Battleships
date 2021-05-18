@@ -54,6 +54,11 @@ public class LobbyScreen : MonoBehaviour
 		roomInfoPanel.RemovePlayer(playerId);
 	}
 
+	public void ClearPlayers()
+	{
+		roomInfoPanel.ClearPlayers();
+	}
+
 	public void SetLobbyControl(bool allow)
 	{
 		allowLobbyControl = allow;
@@ -105,6 +110,11 @@ public class LobbyScreen : MonoBehaviour
 	public void LogPlayerLeft(string playerName)
 	{
 		lobbyLogPanel.Log($"{playerName} покинул комнату");
+	}
+
+	public void ClearLogs()
+	{
+		lobbyLogPanel.ClearLogs();
 	}
 
 	private void StartGameClicked()
