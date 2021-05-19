@@ -36,14 +36,17 @@ public class MPAnswerCheker : MonoBehaviourPunCallbacks
 
 	void Update()
 	{
-		if(_wait && _timer > 10)
+		if(PhotonNetwork.IsMasterClient)
 		{
-			PhotonNetwork.CurrentRoom.SetCustomProperties(new ExitGames.Client.Photon.Hashtable { { CustomProperties.RespawnShips.ToString(), true } });
-			PhotonNetwork.CurrentRoom.SetCustomProperties(new ExitGames.Client.Photon.Hashtable { { CustomProperties.CreateNewExample.ToString(), true } });
-			PhotonNetwork.CurrentRoom.SetCustomProperties(new ExitGames.Client.Photon.Hashtable { { CustomProperties.MoveShips.ToString(), true } });
-			_wait = false;
+			if(_wait && _timer > 10)
+			{
+				PhotonNetwork.CurrentRoom.SetCustomProperties(new ExitGames.Client.Photon.Hashtable { { CustomProperties.RespawnShips.ToString(), true } });
+				PhotonNetwork.CurrentRoom.SetCustomProperties(new ExitGames.Client.Photon.Hashtable { { CustomProperties.CreateNewExample.ToString(), true } });
+				PhotonNetwork.CurrentRoom.SetCustomProperties(new ExitGames.Client.Photon.Hashtable { { CustomProperties.MoveShips.ToString(), true } });
+				_wait = false;
+			}
+			_timer += Time.deltaTime;
 		}
-		_timer += Time.deltaTime;
 	}
 
 	public override void OnRoomPropertiesUpdate(ExitGames.Client.Photon.Hashtable propertiesThatChanged)
@@ -56,7 +59,7 @@ public class MPAnswerCheker : MonoBehaviourPunCallbacks
 		{
 			var answerObject = JsonUtility.FromJson<AnswerObject>(answer.ToString());
 
-			if(answerDone.ToString().Equals("False"))
+			if(!((bool)answerDone))
 			{
 				gameInterfaceController.ExampleScreen.SetAnswersVisible(false);
 
@@ -75,16 +78,23 @@ public class MPAnswerCheker : MonoBehaviourPunCallbacks
 					string playerName = PlayerNameUtility.GetName(player);
 					gameInterfaceController.ExampleScreen.ShowResult(playerName, isCorrect: true);
 
-					_shipMovingHelper.CrushShip(answerObject.Target);
-					PhotonNetwork.CurrentRoom.SetCustomProperties(new ExitGames.Client.Photon.Hashtable { { CustomProperties.AnswerDone.ToString(), true } });
 					Debug.Log(answerDone);
 					_wait = true;
 					_timer = 0;
-					PhotonNetwork.CurrentRoom.SetCustomProperties(new ExitGames.Client.Photon.Hashtable { { CustomProperties.MoveShips.ToString(), false } });
+
+					if(PhotonNetwork.IsMasterClient)
+					{
+						_shipMovingHelper.CrushShip(answerObject.Target);
+						PhotonNetwork.CurrentRoom.SetCustomProperties(new ExitGames.Client.Photon.Hashtable { { CustomProperties.AnswerDone.ToString(), true } });
+						PhotonNetwork.CurrentRoom.SetCustomProperties(new ExitGames.Client.Photon.Hashtable { { CustomProperties.MoveShips.ToString(), false } });
+					}
 				}
 				else
 				{
-					_shipMovingHelper.HitShip((string)propertiesThatChanged["AnswerNumber"]);
+					if(PhotonNetwork.IsMasterClient)
+					{
+						_shipMovingHelper.HitShip((string)propertiesThatChanged["AnswerNumber"]);
+					}
 				}
 			}
 		}
