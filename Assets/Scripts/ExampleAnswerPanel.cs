@@ -57,6 +57,9 @@ public class ExampleAnswerPanel : MonoBehaviour
 		for(int i = 0; i < answers.Count; ++i)
 		{
 			ExampleAnswerButton button = answerButtons[i];
+			var info = buttonToAnswer[button.ButtonId];
+			info.Answer = answers[i];
+			buttonToAnswer[button.ButtonId] = info;
 			button.SetAnswer(answers[i]);
 		}
 	}
