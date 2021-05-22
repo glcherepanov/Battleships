@@ -29,6 +29,7 @@ public class NetworkCreater : MonoBehaviourPunCallbacks
 		PhotonNetwork.CreateRoom(request.LobbyName, new RoomOptions { MaxPlayers = 3 });
 
 		menuController.LobbyScreen.SetLobbyName(request.LobbyName);
+		menuController.LobbyScreen.SetLobbyControl(allow: true);
 		menuController.LobbyScreen.LogLobbyCreated(request.LobbyName);
 		Debug.Log($"Room created: {request.LobbyName}");
 	}
@@ -37,6 +38,7 @@ public class NetworkCreater : MonoBehaviourPunCallbacks
 	{
 		PhotonNetwork.NickName = request.PlayerName;
 		menuController.LobbyScreen.SetLobbyName(request.LobbyName);
+		menuController.LobbyScreen.SetLobbyControl(allow: false);
 
 		Debug.Log($"Attempting to join room: {request.LobbyName}");
 
@@ -65,6 +67,10 @@ public class NetworkCreater : MonoBehaviourPunCallbacks
 
 	private void OnLobbyExitRequested()
 	{
+		menuController.LobbyScreen.SetLobbyControl(allow: false);
+		menuController.LobbyScreen.ClearPlayers();
+		menuController.LobbyScreen.ClearLogs();
+
 		if(PhotonNetwork.CurrentRoom != null)
 		{
 			PhotonNetwork.LeaveRoom();
@@ -85,8 +91,6 @@ public class NetworkCreater : MonoBehaviourPunCallbacks
 	{
 		Debug.Log($"Joined room: {PhotonNetwork.CurrentRoom.Name}");
 
-		menuController.LobbyScreen.SetLobbyControl(allow: PhotonNetwork.IsMasterClient);
-
 		foreach(Player player in PhotonNetwork.CurrentRoom.Players.Values)
 		{
 			string playerName = PlayerNameUtility.GetName(player);
@@ -96,9 +100,7 @@ public class NetworkCreater : MonoBehaviourPunCallbacks
 
 	public override void OnLeftRoom()
 	{
-		menuController.LobbyScreen.SetLobbyControl(allow: false);
-		menuController.LobbyScreen.ClearPlayers();
-		menuController.LobbyScreen.ClearLogs();
+		
 	}
 
 	public override void OnPlayerEnteredRoom(Player newPlayer)

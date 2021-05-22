@@ -79,12 +79,12 @@ public class RoomInfoPanel : MonoBehaviour
 
 	public void ClearPlayers()
 	{
-		for(int i = infos.Count - 1; i >=0; --i)
+		for(int i = infos.Count - 1; i >= 0; --i)
 		{
 			var info = infos[i];
 			if(info.InfoBox != null)
 			{
-				Destroy(info.InfoBox);
+				Destroy(info.InfoBox.gameObject);
 			}
 			infos.RemoveAt(i);
 		}

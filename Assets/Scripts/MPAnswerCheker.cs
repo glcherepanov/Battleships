@@ -63,27 +63,26 @@ public class MPAnswerCheker : MonoBehaviourPunCallbacks
 			{
 				gameInterfaceController.ExampleScreen.SetAnswersVisible(false);
 
+				Player player = null;
+				if(answerObject.Player == "host")
+				{
+					player = PhotonNetwork.CurrentRoom.GetPlayer(PhotonNetwork.CurrentRoom.MasterClientId);
+				}
+				else
+				{
+					player = PhotonNetwork.CurrentRoom.Players.Values.First(p => !p.IsMasterClient);
+				}
+
+				string playerName = PlayerNameUtility.GetName(player);
+
 				if(answerObject.Correct)
 				{
-					Player player = null;
-					if(answerObject.Player == "host")
-					{
-						player = PhotonNetwork.CurrentRoom.GetPlayer(PhotonNetwork.CurrentRoom.MasterClientId);
-					}
-					else
-					{
-						player = PhotonNetwork.CurrentRoom.Players.Values.First(p => !p.IsMasterClient);
-					}
-
-					string playerName = PlayerNameUtility.GetName(player);
 					gameInterfaceController.ExampleScreen.ShowResult(playerName, isCorrect: true);
-
-					Debug.Log(answerDone);
-					_wait = true;
-					_timer = 0;
 
 					if(PhotonNetwork.IsMasterClient)
 					{
+						_wait = true;
+						_timer = 0;
 						_shipMovingHelper.CrushShip(answerObject.Target);
 						PhotonNetwork.CurrentRoom.SetCustomProperties(new ExitGames.Client.Photon.Hashtable { { CustomProperties.AnswerDone.ToString(), true } });
 						PhotonNetwork.CurrentRoom.SetCustomProperties(new ExitGames.Client.Photon.Hashtable { { CustomProperties.MoveShips.ToString(), false } });
@@ -93,7 +92,7 @@ public class MPAnswerCheker : MonoBehaviourPunCallbacks
 				{
 					if(PhotonNetwork.IsMasterClient)
 					{
-						_shipMovingHelper.HitShip((string)propertiesThatChanged["AnswerNumber"]);
+						
 					}
 				}
 			}

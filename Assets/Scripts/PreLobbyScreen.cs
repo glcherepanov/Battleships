@@ -48,9 +48,8 @@ public class PreLobbyScreen : MonoBehaviour
 			LobbyName = lobbyNameInput.text
 		};
 
-		LobbyJoinRequested?.Invoke(request);
-
 		menuController.GoToLocation(MenuLocation.Lobby);
+		LobbyJoinRequested?.Invoke(request);
 	}
 
 	private void CreateClicked()
@@ -61,8 +60,7 @@ public class PreLobbyScreen : MonoBehaviour
 			LobbyName = lobbyNameInput.text
 		};
 
-		LobbyCreateRequested?.Invoke(request);
-
 		menuController.GoToLocation(MenuLocation.Lobby);
+		LobbyCreateRequested?.Invoke(request);
 	}
 }

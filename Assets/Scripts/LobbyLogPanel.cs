@@ -24,7 +24,7 @@ public class LobbyLogPanel : MonoBehaviour
 			LobbyMessageLine line = lines[i];
 			if(line != null)
 			{
-				Destroy(line);
+				Destroy(line.gameObject);
 			}
 
 			lines.RemoveAt(i);

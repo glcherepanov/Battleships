@@ -27,7 +27,11 @@ public class ShootingHelper : MonoBehaviourPunCallbacks
 		if(GameObject.FindGameObjectsWithTag(player).Where(item => item.GetComponent<IslandScript>().IsAlive).ToList().Count == 1)
 		{
 			GameObject.FindGameObjectsWithTag(player);
-			PhotonNetwork.CurrentRoom.SetCustomProperties(new ExitGames.Client.Photon.Hashtable { { CustomProperties.MoveShips.ToString(), false } });
+
+			if(PhotonNetwork.IsMasterClient)
+			{
+				PhotonNetwork.CurrentRoom.SetCustomProperties(new ExitGames.Client.Photon.Hashtable { { CustomProperties.MoveShips.ToString(), false } });
+			}
 		}
 
 		var tower = GameObject.FindGameObjectsWithTag(player).Where(item => item.GetComponent<IslandScript>().IsAlive).FirstOrDefault();
@@ -41,7 +45,10 @@ public class ShootingHelper : MonoBehaviourPunCallbacks
 		if(GameObject.FindGameObjectsWithTag("hostTower").Where(item => item.GetComponent<IslandScript>().IsAlive).ToList().Count == 1
 			&& GameObject.FindGameObjectsWithTag("playerTower").Where(item => item.GetComponent<IslandScript>().IsAlive).ToList().Count == 1)
 		{
-			PhotonNetwork.CurrentRoom.SetCustomProperties(new ExitGames.Client.Photon.Hashtable { { CustomProperties.MoveShips.ToString(), false } });
+			if(PhotonNetwork.IsMasterClient)
+			{
+				PhotonNetwork.CurrentRoom.SetCustomProperties(new ExitGames.Client.Photon.Hashtable { { CustomProperties.MoveShips.ToString(), false } });
+			}
 		}
 
 		var tower = GameObject.FindGameObjectsWithTag("hostTower").Where(item => item.GetComponent<IslandScript>().IsAlive).FirstOrDefault();
