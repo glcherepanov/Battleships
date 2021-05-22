@@ -70,7 +70,7 @@ public class RoomInfoPanel : MonoBehaviour
 			var info = infos[i];
 			if(info.InfoBox != null)
 			{
-				Destroy(info.InfoBox);
+				Destroy(info.InfoBox.gameObject);
 			}
 			infos.RemoveAt(i);
 			SortInfo();
