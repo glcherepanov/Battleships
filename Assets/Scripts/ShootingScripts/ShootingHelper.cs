@@ -85,7 +85,19 @@ public class ShootingHelper : MonoBehaviourPunCallbacks
 		{
 			if(crash.Equals(true))
 			{
-				CrashBothPlayerTowers();
+				PhotonNetwork.CurrentRoom.CustomProperties.TryGetValue( CustomProperties.AnswerDone.ToString(), out object player );
+				if ( player.ToString() == "host" )
+				{
+					CrashTower( "player" );
+				}
+				else if ( player.ToString() == "host" )
+				{
+					CrashTower( "host" );
+				}
+				else
+				{
+					CrashBothPlayerTowers();
+				}
 			}
 		}
 	}
