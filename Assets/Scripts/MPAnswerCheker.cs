@@ -91,7 +91,7 @@ public class MPAnswerCheker : MonoBehaviourPunCallbacks
 				else
 				{
 					propertiesThatChanged.TryGetValue( "onlePlayerAlreadyLose", out object onlePlayerAlreadyLose );
-					if ( onlePlayerAlreadyLose.ToString() == "host" || onlePlayerAlreadyLose.ToString() == "player" )
+					if ( onlePlayerAlreadyLose?.ToString() == "host" || onlePlayerAlreadyLose?.ToString() == "player" )
 					{
 						PhotonNetwork.CurrentRoom.SetCustomProperties( new ExitGames.Client.Photon.Hashtable { { CustomProperties.AnswerDone.ToString(), true } } );
 						PhotonNetwork.CurrentRoom.SetCustomProperties( new ExitGames.Client.Photon.Hashtable { { CustomProperties.MoveShips.ToString(), false } } );
@@ -100,7 +100,7 @@ public class MPAnswerCheker : MonoBehaviourPunCallbacks
 					}
 					else
 					{
-						PhotonNetwork.CurrentRoom.SetCustomProperties( new ExitGames.Client.Photon.Hashtable { { onlePlayerAlreadyLose, answerObject.Player } } );
+						PhotonNetwork.CurrentRoom.SetCustomProperties( new ExitGames.Client.Photon.Hashtable { { "onlePlayerAlreadyLose", answerObject.Player } } );
 					}
 				}
 			}

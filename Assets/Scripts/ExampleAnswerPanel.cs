@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Photon.Pun;
+using System;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -47,8 +48,21 @@ public class ExampleAnswerPanel : MonoBehaviour
 	{
 		for(int i = 0; i < answerButtons.Count; ++i)
 		{
-			ExampleAnswerButton button = answerButtons[i];
-			button.gameObject.SetActive(isVisible);
+			if ( isVisible == false )
+			{
+				PhotonNetwork.CurrentRoom.CustomProperties.TryGetValue( CustomProperties.CheckAnswer.ToString(), out object answer );
+				var answerObject = JsonUtility.FromJson<AnswerObject>( answer.ToString() );
+				if ( answerObject?.Player == "host" && PhotonNetwork.IsMasterClient || answerObject?.Player == "player" && !PhotonNetwork.IsMasterClient )
+				{
+					ExampleAnswerButton button = answerButtons[ i ];
+					button.gameObject.SetActive( isVisible );
+				}
+			}
+			else
+			{
+				ExampleAnswerButton button = answerButtons[ i ];
+				button.gameObject.SetActive( isVisible );
+			}
 		}
 	}
 
